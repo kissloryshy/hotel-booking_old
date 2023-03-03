@@ -1,0 +1,10 @@
+server:
+  port:
+    8002
+
+spring:
+  application:
+    name: reservation-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:10001/hotel-booking?currentSchema=public&user=postgres&password=1212

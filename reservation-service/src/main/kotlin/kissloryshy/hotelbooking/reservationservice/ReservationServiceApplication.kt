@@ -1,11 +1,11 @@
-package kissloryshy.hotelbooking
+package kissloryshy.hotelbooking.reservationservice
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class HotelBookingApplication
+class ReservationServiceApplication
 
 fun main(args: Array<String>) {
-    runApplication<HotelBookingApplication>(*args)
+    runApplication<ReservationServiceApplication>(*args)
 }
