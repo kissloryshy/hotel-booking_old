@@ -1,6 +1,7 @@
 package kissloryshy.hotelbooking.reservationservice.controller
 
 import kissloryshy.hotelbooking.reservationservice.entity.Reservation
+import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationCountDto
 import kissloryshy.hotelbooking.reservationservice.service.ReservationService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -12,18 +13,18 @@ import org.springframework.web.bind.annotation.RestController
 class ReservationController(
     private val reservationService: ReservationService
 ) {
-    @GetMapping("/getCount")
-    fun getCount(): Long {
-        return reservationService.getCount()
+    @GetMapping("/getReservationsCount")
+    fun getReservationsCount(): ReservationCountDto {
+        return reservationService.getReservationsCount()
     }
 
     @GetMapping("/getAllReservations")
     fun getAllReservations(): List<Reservation> {
-        return reservationService.getAll()
+        return reservationService.getAllReservations()
     }
 
-    @GetMapping("/getById/{reservationId}")
+    @GetMapping("/getReservationById/{reservationId}")
     fun getById(@PathVariable(value = "reservationId") reservationId: Long): Reservation {
-        return reservationService.getById(reservationId)
+        return reservationService.getReservationById(reservationId)
     }
 }
