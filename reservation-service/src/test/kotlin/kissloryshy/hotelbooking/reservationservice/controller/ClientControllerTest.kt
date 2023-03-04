@@ -1,6 +1,7 @@
 package kissloryshy.hotelbooking.reservationservice.controller
 
 import kissloryshy.hotelbooking.reservationservice.entity.Client
+import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
 import kissloryshy.hotelbooking.reservationservice.service.ClientService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -28,15 +29,36 @@ class ClientControllerTest {
     private lateinit var clientService: ClientService
 
     @Test
-    fun getAllClients() {
+    fun getCount() {
+        val client1 = Client("testUn1", "testFn1", "testLn1", "testEm1", "testPn1", LocalDate.now(), mutableSetOf())
+        val client2 = Client("testUn2", "testFn2", "testLn2", "testEm2", "testPn2", LocalDate.now(), mutableSetOf())
+        val clients = listOf(client1, client2)
+        val clientCountDto = ClientCountDto(clients.size.toLong())
+
+        `when`(clientService.getCount()).thenReturn(clientCountDto)
+
+        val request =
+            MockMvcRequestBuilders.get("/api/clients/getCount").contentType(MediaType.APPLICATION_JSON)
+        val result = mockMvc.perform(request)
+
+        result
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.clientCount").value(clientCountDto.clientCount))
+
+        Mockito.verify(clientService, times(1)).getCount()
+    }
+
+    @Test
+    fun getAll() {
         val client1 = Client("testUn1", "testFn1", "testLn1", "testEm1", "testPn1", LocalDate.now(), mutableSetOf())
         val client2 = Client("testUn2", "testFn2", "testLn2", "testEm2", "testPn2", LocalDate.now(), mutableSetOf())
         val clients = listOf(client1, client2)
 
-        `when`(clientService.getAllClients()).thenReturn(clients)
+        `when`(clientService.getAll()).thenReturn(clients)
 
         val request =
-            MockMvcRequestBuilders.get("/api/reservation/getAllClients").contentType(MediaType.APPLICATION_JSON)
+            MockMvcRequestBuilders.get("/api/clients/getAll").contentType(MediaType.APPLICATION_JSON)
         val result = mockMvc.perform(request)
 
         result
@@ -46,7 +68,7 @@ class ClientControllerTest {
             .andExpect(jsonPath("$[0].firstName").value(clients[0].firstName))
             .andExpect(jsonPath("$[1].phoneNumber").value(clients[1].phoneNumber))
 
-        Mockito.verify(clientService, times(1)).getAllClients()
+        Mockito.verify(clientService, times(1)).getAll()
     }
 
     @Test
@@ -57,7 +79,7 @@ class ClientControllerTest {
         `when`(clientService.getByUsername("username")).thenReturn(client)
 
         val request =
-            MockMvcRequestBuilders.get("/api/reservation/getByUsername/$un").contentType(MediaType.APPLICATION_JSON)
+            MockMvcRequestBuilders.get("/api/clients/getByUsername/$un").contentType(MediaType.APPLICATION_JSON)
         val result = mockMvc.perform(request)
 
         result

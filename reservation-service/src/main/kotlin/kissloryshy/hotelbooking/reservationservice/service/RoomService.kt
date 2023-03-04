@@ -9,19 +9,15 @@ import org.springframework.stereotype.Service
 class RoomService(
     private val roomRepository: RoomRepository
 ) {
-    fun getRoomCount(): RoomCountDto {
+    fun getCount(): RoomCountDto {
         return RoomCountDto(roomRepository.count())
     }
 
-    fun getAllRooms(): List<Room> {
+    fun getAll(): List<Room> {
         return roomRepository.findAll()
     }
 
     fun getByRoomNumber(roomNumber: Long): Room {
-        return if (roomRepository.findByRoomNumber(roomNumber).isPresent) {
-            roomRepository.findByRoomNumber(roomNumber).get()
-        } else {
-            Room()
-        }
+        return roomRepository.findByRoomNumber(roomNumber)
     }
 }

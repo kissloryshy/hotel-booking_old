@@ -37,10 +37,10 @@ class ReservationControllerTest {
         val reservations = listOf(reservation1, reservation2)
         val reservationCountDto = ReservationCountDto(reservations.size.toLong())
 
-        `when`(reservationService.getReservationsCount()).thenReturn(reservationCountDto)
+        `when`(reservationService.getCount()).thenReturn(reservationCountDto)
 
         val request =
-            MockMvcRequestBuilders.get("/api/reservation/getReservationsCount").contentType(MediaType.APPLICATION_JSON)
+            MockMvcRequestBuilders.get("/api/reservations/getCount").contentType(MediaType.APPLICATION_JSON)
         val result = mockMvc.perform(request)
 
         result
@@ -48,19 +48,19 @@ class ReservationControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.reservationCount").value(reservationCountDto.reservationCount))
 
-        Mockito.verify(reservationService, times(1)).getReservationsCount()
+        Mockito.verify(reservationService, times(1)).getCount()
     }
 
     @Test
-    fun getAllReservations() {
+    fun getAll() {
         val reservation1 = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
         val reservation2 = Reservation(2, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
         val reservations = listOf(reservation1, reservation2)
 
-        `when`(reservationService.getAllReservations()).thenReturn(reservations)
+        `when`(reservationService.getAll()).thenReturn(reservations)
 
         val request =
-            MockMvcRequestBuilders.get("/api/reservation/getAllReservations").contentType(MediaType.APPLICATION_JSON)
+            MockMvcRequestBuilders.get("/api/reservations/getAll").contentType(MediaType.APPLICATION_JSON)
         val result = mockMvc.perform(request)
 
         result
@@ -70,17 +70,17 @@ class ReservationControllerTest {
             .andExpect(jsonPath("$[0].reservationId").value(1))
             .andExpect(jsonPath("$[1].reservationId").value(2))
 
-        Mockito.verify(reservationService, times(1)).getAllReservations()
+        Mockito.verify(reservationService, times(1)).getAll()
     }
 
     @Test
     fun getById() {
-        val reservation1 = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
+        val reservation = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
 
-        `when`(reservationService.getReservationById(1)).thenReturn(reservation1)
+        `when`(reservationService.getById(1)).thenReturn(reservation)
 
         val id = 1
-        val request = MockMvcRequestBuilders.get("/api/reservation/getReservationById/$id")
+        val request = MockMvcRequestBuilders.get("/api/reservations/getById/$id")
             .contentType(MediaType.APPLICATION_JSON)
         val result = mockMvc.perform(request)
 
@@ -89,6 +89,6 @@ class ReservationControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.reservationId").value(1))
 
-        Mockito.verify(reservationService, times(1)).getReservationById(id.toLong())
+        Mockito.verify(reservationService, times(1)).getById(id.toLong())
     }
 }

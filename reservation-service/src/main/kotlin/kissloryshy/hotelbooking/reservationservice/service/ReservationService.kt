@@ -9,19 +9,15 @@ import org.springframework.stereotype.Service
 class ReservationService(
     private val reservationRepository: ReservationRepository
 ) {
-    fun getReservationsCount(): ReservationCountDto {
+    fun getCount(): ReservationCountDto {
         return ReservationCountDto(reservationRepository.count())
     }
 
-    fun getAllReservations(): List<Reservation> {
+    fun getAll(): List<Reservation> {
         return reservationRepository.findAll()
     }
 
-    fun getReservationById(reservationId: Long): Reservation {
-        return if (reservationRepository.findById(reservationId).isPresent) {
-            reservationRepository.findById(reservationId).get()
-        } else {
-            Reservation()
-        }
+    fun getById(reservationId: Long): Reservation {
+        return reservationRepository.findByReservationId(reservationId)
     }
 }

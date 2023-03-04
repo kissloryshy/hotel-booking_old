@@ -9,22 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/reservation")
+@RequestMapping("/api/reservations")
 class ReservationController(
     private val reservationService: ReservationService
 ) {
-    @GetMapping("/getReservationsCount")
-    fun getReservationsCount(): ReservationCountDto {
-        return reservationService.getReservationsCount()
+    @GetMapping("/getCount")
+    fun getCount(): ReservationCountDto {
+        return reservationService.getCount()
     }
 
-    @GetMapping("/getAllReservations")
-    fun getAllReservations(): List<Reservation> {
-        return reservationService.getAllReservations()
+    @GetMapping("/getAll")
+    fun getAll(): List<Reservation> {
+        return reservationService.getAll()
     }
 
-    @GetMapping("/getReservationById/{reservationId}")
+    @GetMapping("/getById/{reservationId}")
     fun getById(@PathVariable(value = "reservationId") reservationId: Long): Reservation {
-        return reservationService.getReservationById(reservationId)
+        return reservationService.getById(reservationId)
     }
 }

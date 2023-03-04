@@ -9,7 +9,7 @@ open class Reservation(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id", nullable = false)
-    open var reservationId: Int? = null,
+    open var reservationId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_username")
