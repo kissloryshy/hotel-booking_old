@@ -1,0 +1,26 @@
+server:
+  port: 9000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: reservations
+          uri: http://localhost:8002/api/reservations
+          predicates:
+            - Path=/api/reservations/**
+        - id: rooms
+          uri: http://localhost:8002/api/rooms
+          predicates:
+            - Path=/api/rooms/**
+        - id: clients
+          uri: http://localhost:8002/api/clients
+          predicates:
+            - Path=/api/clients/**
