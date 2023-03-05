@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/clients")
 class ClientController(
     private val clientService: ClientService,
-    private val kafkaTemplate: KafkaTemplate<String, String>
+    private val kafkaTemplate: KafkaTemplate<String, String>,
+    private val clientKafkaTemplate: KafkaTemplate<String, Client>
 ) {
     @GetMapping("/getCount")
     fun getCount(): ClientCountDto {
@@ -28,6 +29,8 @@ class ClientController(
 
     @GetMapping("/getByUsername/{username}")
     fun getByUsername(@PathVariable(value = "username") username: String): Client {
-        return clientService.getByUsername(username)
+        val client = clientService.getByUsername(username)
+        clientKafkaTemplate.send("clientTopic", client)
+        return client
     }
 }
