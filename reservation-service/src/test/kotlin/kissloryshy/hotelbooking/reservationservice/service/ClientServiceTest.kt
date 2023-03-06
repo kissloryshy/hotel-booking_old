@@ -49,7 +49,8 @@ class ClientServiceTest {
         val client = Client("testUn1", "testFn1", "testLn1", "testEm1", "testPn1", LocalDate.now(), mutableSetOf())
         val username = "testUn1"
 
-        `when`(clientRepository.findClientByUsername(username)).thenReturn(client)
+//        TODO
+//        `when`(clientRepository.findClientByUsername(username)).thenReturn(client)
 
         val returnedClient = clientService.getByUsername(username)
 

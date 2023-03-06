@@ -77,7 +77,8 @@ class ReservationControllerTest {
     fun getById() {
         val reservation = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
 
-        `when`(reservationService.getById(1)).thenReturn(reservation)
+//        TODO
+//        `when`(reservationService.getById(1)).thenReturn(reservation)
 
         val id = 1
         val request = MockMvcRequestBuilders.get("/api/reservations/getById/$id")

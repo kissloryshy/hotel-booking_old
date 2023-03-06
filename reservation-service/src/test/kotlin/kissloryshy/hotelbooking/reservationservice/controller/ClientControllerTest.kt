@@ -76,7 +76,8 @@ class ClientControllerTest {
         val un = "username"
         val client = Client(un, "firstName", "lastName", "email", "phoneNumber", LocalDate.now(), mutableSetOf())
 
-        `when`(clientService.getByUsername("username")).thenReturn(client)
+//        TODO
+//        `when`(clientService.getByUsername("username")).thenReturn(client)
 
         val request =
             MockMvcRequestBuilders.get("/api/clients/getByUsername/$un").contentType(MediaType.APPLICATION_JSON)

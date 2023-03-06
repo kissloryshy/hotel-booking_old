@@ -74,7 +74,8 @@ class RoomControllerTest {
     fun getByRoomNumber() {
         val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30), mutableSetOf())
 
-        `when`(roomService.getByRoomNumber(1)).thenReturn(room1)
+//        TODO
+//        `when`(roomService.getByRoomNumber(1)).thenReturn(room1)
 
         val id = 1
         val request =
