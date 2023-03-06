@@ -3,9 +3,8 @@ package kissloryshy.hotelbooking.reservationservice.service
 import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
 import kissloryshy.hotelbooking.reservationservice.repository.ClientRepository
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
@@ -15,8 +14,10 @@ import java.time.LocalDate
 class ClientServiceTest {
     @Mock
     private lateinit var clientRepository: ClientRepository
+
     @InjectMocks
     private lateinit var clientService: ClientService
+
     init {
         MockitoAnnotations.openMocks(this)
     }
@@ -49,8 +50,7 @@ class ClientServiceTest {
         val client = Client("testUn1", "testFn1", "testLn1", "testEm1", "testPn1", LocalDate.now(), mutableSetOf())
         val username = "testUn1"
 
-//        TODO
-//        `when`(clientRepository.findClientByUsername(username)).thenReturn(client)
+        `when`(clientRepository.findClientByUsername(username)).thenReturn(client)
 
         val returnedClient = clientService.getByUsername(username)
 

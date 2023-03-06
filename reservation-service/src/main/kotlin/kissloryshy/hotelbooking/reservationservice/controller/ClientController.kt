@@ -31,9 +31,8 @@ class ClientController(
 
     @GetMapping("/getByUsername/{username}")
     fun getByUsername(@PathVariable(value = "username") username: String): ResponseEntity<Client> {
-        val optionalClient = clientService.getByUsername(username)
-        if (optionalClient.isPresent) {
-            val client = optionalClient.get()
+        val client: Client? = clientService.getByUsername(username)
+        if (client != null) {
             clientKafkaTemplate.send("clientTopic", client)
             return ResponseEntity.ok(client)
         } else {

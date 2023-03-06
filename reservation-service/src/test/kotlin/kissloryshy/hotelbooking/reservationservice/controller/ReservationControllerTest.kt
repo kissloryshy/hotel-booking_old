@@ -4,6 +4,7 @@ import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.Reservation
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationCountDto
+import kissloryshy.hotelbooking.reservationservice.exception.ReservationNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.ReservationService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -74,11 +75,10 @@ class ReservationControllerTest {
     }
 
     @Test
-    fun getById() {
+    fun getById_exists() {
         val reservation = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
 
-//        TODO
-//        `when`(reservationService.getById(1)).thenReturn(reservation)
+        `when`(reservationService.getById(1)).thenReturn(reservation)
 
         val id = 1
         val request = MockMvcRequestBuilders.get("/api/reservations/getById/$id")
@@ -91,5 +91,22 @@ class ReservationControllerTest {
             .andExpect(jsonPath("$.reservationId").value(1))
 
         Mockito.verify(reservationService, times(1)).getById(id.toLong())
+    }
+
+    @Test
+    fun getById_notExists() {
+        val reservationId = "999999999999"
+        val request =
+            MockMvcRequestBuilders.get("/api/reservations/getById/$reservationId").contentType(MediaType.APPLICATION_JSON)
+        val result = mockMvc.perform(request)
+        result
+            .andExpect(status().isNotFound)
+            .andExpect { res -> assertTrue(res.resolvedException is ReservationNotFoundException) }
+            .andExpect { res ->
+                assertEquals(
+                    "Reservation not found with id: $reservationId",
+                    res.resolvedException!!.message
+                )
+            }
     }
 }

@@ -4,7 +4,6 @@ import kissloryshy.hotelbooking.reservationservice.entity.Reservation
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationCountDto
 import kissloryshy.hotelbooking.reservationservice.repository.ReservationRepository
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class ReservationService(
@@ -18,7 +17,7 @@ class ReservationService(
         return reservationRepository.findAll()
     }
 
-    fun getById(reservationId: Long): Optional<Reservation> {
+    fun getById(reservationId: Long): Reservation? {
         return reservationRepository.findByReservationId(reservationId)
     }
 }

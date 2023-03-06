@@ -2,6 +2,7 @@ package kissloryshy.hotelbooking.reservationservice.controller
 
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomCountDto
+import kissloryshy.hotelbooking.reservationservice.exception.RoomNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.RoomService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -71,11 +72,10 @@ class RoomControllerTest {
     }
 
     @Test
-    fun getByRoomNumber() {
+    fun getByRoomNumber_exists() {
         val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30), mutableSetOf())
 
-//        TODO
-//        `when`(roomService.getByRoomNumber(1)).thenReturn(room1)
+        `when`(roomService.getByRoomNumber(1)).thenReturn(room1)
 
         val id = 1
         val request =
@@ -88,5 +88,22 @@ class RoomControllerTest {
             .andExpect(jsonPath("$.roomNumber").value(1))
 
         Mockito.verify(roomService, Mockito.times(1)).getByRoomNumber(id.toLong())
+    }
+
+    @Test
+    fun getByRoomNumber_notExists() {
+        val roomNumber = "999999999999"
+        val request =
+            MockMvcRequestBuilders.get("/api/rooms/getByRoomNumber/$roomNumber").contentType(MediaType.APPLICATION_JSON)
+        val result = mockMvc.perform(request)
+        result
+            .andExpect(status().isNotFound)
+            .andExpect { res -> assertTrue(res.resolvedException is RoomNotFoundException) }
+            .andExpect { res ->
+                assertEquals(
+                    "Room not found with number: $roomNumber",
+                    res.resolvedException!!.message
+                )
+            }
     }
 }

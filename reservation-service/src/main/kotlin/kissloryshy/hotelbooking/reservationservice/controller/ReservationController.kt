@@ -28,8 +28,8 @@ class ReservationController(
     @GetMapping("/getById/{reservationId}")
     fun getById(@PathVariable(value = "reservationId") reservationId: Long): ResponseEntity<Reservation> {
         val reservation = reservationService.getById(reservationId)
-        if (reservation.isPresent) {
-            return ResponseEntity.ok(reservation.get())
+        if (reservation != null) {
+            return ResponseEntity.ok(reservation)
         } else {
             throw ReservationNotFoundException("Reservation not found with id: $reservationId")
         }

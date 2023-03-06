@@ -4,7 +4,6 @@ import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
 import kissloryshy.hotelbooking.reservationservice.repository.ClientRepository
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class ClientService(
@@ -18,7 +17,7 @@ class ClientService(
         return clientRepository.findAll()
     }
 
-    fun getByUsername(username: String): Optional<Client> {
+    fun getByUsername(username: String): Client? {
         return clientRepository.findClientByUsername(username)
     }
 }

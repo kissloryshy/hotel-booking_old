@@ -3,9 +3,8 @@ package kissloryshy.hotelbooking.reservationservice.service
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomCountDto
 import kissloryshy.hotelbooking.reservationservice.repository.RoomRepository
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
@@ -15,8 +14,10 @@ import java.math.BigDecimal
 class RoomServiceTest {
     @Mock
     private lateinit var roomRepository: RoomRepository
+
     @InjectMocks
     private lateinit var roomService: RoomService
+
     init {
         MockitoAnnotations.openMocks(this)
     }
@@ -45,15 +46,16 @@ class RoomServiceTest {
     }
 
     @Test
-    fun getByRoomNumber() {
+    fun getByRoomNumber_exists() {
         val room = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30), mutableSetOf())
         val roomNumber = 1L
 
-//        TODO
-//        `when`(roomRepository.findByRoomNumber(roomNumber)).thenReturn(room)
+        `when`(roomRepository.findByRoomNumber(roomNumber)).thenReturn(room)
 
         val returnedRoom = roomService.getByRoomNumber(roomNumber)
 
-//        assertEquals(roomNumber, returnedRoom.roomNumber)
+        if (returnedRoom != null) {
+            assertEquals(roomNumber, returnedRoom.roomNumber)
+        }
     }
 }

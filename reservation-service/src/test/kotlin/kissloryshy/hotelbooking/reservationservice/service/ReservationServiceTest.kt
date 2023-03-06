@@ -5,9 +5,8 @@ import kissloryshy.hotelbooking.reservationservice.entity.Reservation
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationCountDto
 import kissloryshy.hotelbooking.reservationservice.repository.ReservationRepository
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
@@ -17,8 +16,10 @@ import java.time.LocalDate
 class ReservationServiceTest {
     @Mock
     private lateinit var reservationRepository: ReservationRepository
+
     @InjectMocks
     private lateinit var reservationService: ReservationService
+
     init {
         MockitoAnnotations.openMocks(this)
     }
@@ -51,11 +52,12 @@ class ReservationServiceTest {
         val reservation = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
         val reservationId = 1L
 
-//        TODO
-//        `when`(reservationRepository.findByReservationId(reservationId)).thenReturn(reservation)
+        `when`(reservationRepository.findByReservationId(reservationId)).thenReturn(reservation)
 
         val returnedReservation = reservationService.getById(reservationId)
 
-//        assertEquals(reservationId, returnedReservation.reservationId)
+        if (returnedReservation != null) {
+            assertEquals(reservationId, returnedReservation.reservationId)
+        }
     }
 }

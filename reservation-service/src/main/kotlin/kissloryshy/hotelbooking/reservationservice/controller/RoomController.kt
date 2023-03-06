@@ -27,10 +27,10 @@ class RoomController(
     @GetMapping("/getByRoomNumber/{roomNumber}")
     fun getByRoomNumber(@PathVariable(value = "roomNumber") roomNumber: Long): Room {
         val room = roomService.getByRoomNumber(roomNumber)
-        if (room.isPresent) {
-            return room.get()
+        if (room != null) {
+            return room
         } else {
-            throw RoomNotFoundException("Room not found with roomnumber: $roomNumber")
+            throw RoomNotFoundException("Room not found with number: $roomNumber")
         }
     }
 }
