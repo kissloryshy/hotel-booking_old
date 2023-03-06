@@ -90,4 +90,9 @@ class ClientControllerTest {
 
         Mockito.verify(clientService, times(1)).getByUsername(un)
     }
+
+    @Test
+    fun getByUsername_notExistingClient() {
+//        val username = "ff2158bb-800a-4c1b-b0dd-4d2b55b9f3c0"
+    }
 }

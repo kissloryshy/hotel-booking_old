@@ -2,6 +2,7 @@ package kissloryshy.hotelbooking.reservationservice.controller
 
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomCountDto
+import kissloryshy.hotelbooking.reservationservice.exception.RoomNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.RoomService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -25,6 +26,11 @@ class RoomController(
 
     @GetMapping("/getByRoomNumber/{roomNumber}")
     fun getByRoomNumber(@PathVariable(value = "roomNumber") roomNumber: Long): Room {
-        return roomService.getByRoomNumber(roomNumber)
+        val room = roomService.getByRoomNumber(roomNumber)
+        if (room.isPresent) {
+            return room.get()
+        } else {
+            throw RoomNotFoundException("Room not found with roomnumber: $roomNumber")
+        }
     }
 }

@@ -2,7 +2,9 @@ package kissloryshy.hotelbooking.reservationservice.controller
 
 import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
+import kissloryshy.hotelbooking.reservationservice.exception.ClientNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.ClientService
+import org.springframework.http.ResponseEntity
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -28,9 +30,14 @@ class ClientController(
     }
 
     @GetMapping("/getByUsername/{username}")
-    fun getByUsername(@PathVariable(value = "username") username: String): Client {
-        val client = clientService.getByUsername(username)
-        clientKafkaTemplate.send("clientTopic", client)
-        return client
+    fun getByUsername(@PathVariable(value = "username") username: String): ResponseEntity<Client> {
+        val optionalClient = clientService.getByUsername(username)
+        if (optionalClient.isPresent) {
+            val client = optionalClient.get()
+            clientKafkaTemplate.send("clientTopic", client)
+            return ResponseEntity.ok(client)
+        } else {
+            throw ClientNotFoundException("Client not found with username: $username")
+        }
     }
 }
