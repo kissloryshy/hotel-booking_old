@@ -9,12 +9,20 @@ import org.springframework.stereotype.Component
 class KafkaConsumer {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    @KafkaListener(topics = ["messageTopic"], groupId = "messageId", containerFactory = "messageKafkaListenerContainerFactory")
+    @KafkaListener(
+        topics = ["messageTopic"],
+        groupId = "messageId",
+        containerFactory = "messageKafkaListenerContainerFactory"
+    )
     fun messageNotification(message: String) {
         logger.info("Message received {}", message)
     }
 
-    @KafkaListener(topics = ["clientTopic"], groupId = "clientGroupId", containerFactory = "clientKafkaListenerContainerFactory")
+    @KafkaListener(
+        topics = ["clientTopic"],
+        groupId = "clientGroupId",
+        containerFactory = "clientKafkaListenerContainerFactory"
+    )
     fun clientNotification(client: Client) {
         logger.info("Client received {}", client)
     }

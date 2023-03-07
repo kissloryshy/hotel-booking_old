@@ -1,4 +1,4 @@
-package kissloryshy.hotelbooking.reservationservice.exception
+package kissloryshy.hotelbooking.reservationservice.exception.exceptions
 
 class RoomNotFoundException(
     override val message: String

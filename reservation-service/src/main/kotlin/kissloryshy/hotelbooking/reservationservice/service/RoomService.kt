@@ -17,7 +17,11 @@ class RoomService(
         return roomRepository.findAll()
     }
 
-    fun getByRoomNumber(roomNumber: Long): Room? {
+    fun getByRoomNumber(roomNumber: Int): Room? {
         return roomRepository.findByRoomNumber(roomNumber)
+    }
+
+    fun create(room: Room): Room {
+        return roomRepository.save(room)
     }
 }

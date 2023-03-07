@@ -2,16 +2,13 @@ package kissloryshy.hotelbooking.reservationservice.controller
 
 import kissloryshy.hotelbooking.reservationservice.entity.Reservation
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationCountDto
-import kissloryshy.hotelbooking.reservationservice.exception.ReservationNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.ReservationService
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/reservations")
+@Validated
 class ReservationController(
     private val reservationService: ReservationService
 ) {
@@ -25,13 +22,8 @@ class ReservationController(
         return reservationService.getAll()
     }
 
-    @GetMapping("/getById/{reservationId}")
-    fun getById(@PathVariable(value = "reservationId") reservationId: Long): ResponseEntity<Reservation> {
-        val reservation = reservationService.getById(reservationId)
-        if (reservation != null) {
-            return ResponseEntity.ok(reservation)
-        } else {
-            throw ReservationNotFoundException("Reservation not found with id: $reservationId")
-        }
+    @PostMapping("/create")
+    fun create(@RequestBody reservation: Reservation): Reservation {
+        return reservationService.create(reservation)
     }
 }

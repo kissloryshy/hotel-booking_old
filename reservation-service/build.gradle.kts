@@ -15,6 +15,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:+")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.flywaydb:flyway-core:9.15.1")
+    implementation("jakarta.validation:jakarta.validation-api:3.0.2")
     implementation("org.springframework.kafka:spring-kafka:3.0.3")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     runtimeOnly("org.postgresql:postgresql")

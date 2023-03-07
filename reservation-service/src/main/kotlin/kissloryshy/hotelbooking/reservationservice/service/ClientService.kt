@@ -20,4 +20,8 @@ class ClientService(
     fun getByUsername(username: String): Client? {
         return clientRepository.findClientByUsername(username)
     }
+
+    fun create(client: Client): Client {
+        return clientRepository.save(client)
+    }
 }

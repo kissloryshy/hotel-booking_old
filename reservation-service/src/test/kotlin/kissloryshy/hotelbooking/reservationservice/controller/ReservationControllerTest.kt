@@ -4,7 +4,6 @@ import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.Reservation
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationCountDto
-import kissloryshy.hotelbooking.reservationservice.exception.ReservationNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.ReservationService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -33,8 +32,8 @@ class ReservationControllerTest {
 
     @Test
     fun getCount() {
-        val reservation1 = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
-        val reservation2 = Reservation(2, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
+        val reservation1 = Reservation(Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
+        val reservation2 = Reservation(Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
         val reservations = listOf(reservation1, reservation2)
         val reservationCountDto = ReservationCountDto(reservations.size.toLong())
 
@@ -54,8 +53,9 @@ class ReservationControllerTest {
 
     @Test
     fun getAll() {
-        val reservation1 = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
-        val reservation2 = Reservation(2, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
+        val testSignedDate = LocalDate.now()
+        val reservation1 = Reservation(Client(), Room(), testSignedDate, LocalDate.now(), LocalDate.now())
+        val reservation2 = Reservation(Client(), Room(), testSignedDate, LocalDate.now(), LocalDate.now())
         val reservations = listOf(reservation1, reservation2)
 
         `when`(reservationService.getAll()).thenReturn(reservations)
@@ -68,45 +68,7 @@ class ReservationControllerTest {
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.length()").value(reservations.size))
-            .andExpect(jsonPath("$[0].reservationId").value(1))
-            .andExpect(jsonPath("$[1].reservationId").value(2))
 
         Mockito.verify(reservationService, times(1)).getAll()
-    }
-
-    @Test
-    fun getById_exists() {
-        val reservation = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
-
-        `when`(reservationService.getById(1)).thenReturn(reservation)
-
-        val id = 1
-        val request = MockMvcRequestBuilders.get("/api/reservations/getById/$id")
-            .contentType(MediaType.APPLICATION_JSON)
-        val result = mockMvc.perform(request)
-
-        result
-            .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.reservationId").value(1))
-
-        Mockito.verify(reservationService, times(1)).getById(id.toLong())
-    }
-
-    @Test
-    fun getById_notExists() {
-        val reservationId = "999999999999"
-        val request =
-            MockMvcRequestBuilders.get("/api/reservations/getById/$reservationId").contentType(MediaType.APPLICATION_JSON)
-        val result = mockMvc.perform(request)
-        result
-            .andExpect(status().isNotFound)
-            .andExpect { res -> assertTrue(res.resolvedException is ReservationNotFoundException) }
-            .andExpect { res ->
-                assertEquals(
-                    "Reservation not found with id: $reservationId",
-                    res.resolvedException!!.message
-                )
-            }
     }
 }

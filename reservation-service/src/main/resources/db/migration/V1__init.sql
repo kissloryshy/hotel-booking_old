@@ -1,6 +1,7 @@
 create table clients
 (
-    username     varchar(128) not null primary key,
+    client_id    bigserial    not null primary key,
+    username     varchar(128) not null,
     first_name   varchar(128) not null,
     last_name    varchar(128) not null,
     email        varchar(128) not null,
@@ -15,12 +16,13 @@ VALUES ('kissloryshy', 'lory', 'kiss', 'kiss@gmail.com', '+79044479988', '1998-0
 
 create table rooms
 (
-    room_number   integer primary key,
-    room_capacity integer,
-    class         integer,
-    is_enabled    boolean,
-    weekday_cost  numeric(12, 2),
-    holiday_cost  numeric(12, 2)
+    room_id       bigserial      not null primary key,
+    room_number   integer        not null,
+    room_capacity integer        not null,
+    class         integer        not null,
+    is_enabled    boolean        not null,
+    weekday_cost  numeric(12, 2) not null,
+    holiday_cost  numeric(12, 2) not null
 );
 
 insert into rooms (room_number, room_capacity, class, is_enabled, weekday_cost, holiday_cost)
@@ -31,12 +33,12 @@ VALUES (1, 1, 1, true, '1500', '1900'),
 
 create table reservations
 (
-    reservation_id    serial primary key,
-    client_username   varchar(128),
-    room_number       integer,
-    contract_signed   date,
-    reservation_start date,
-    reservation_end   date,
-    constraint fk_reservations_clients foreign key (client_username) references clients (username),
-    constraint fk_reservations_rooms foreign key (room_number) references rooms (room_number)
+    reservation_id    bigserial not null primary key,
+    client_id         bigint    not null,
+    room_id           bigint    not null,
+    contract_signed   date      not null,
+    reservation_start date      not null,
+    reservation_end   date      not null,
+    constraint fk_reservations_clients foreign key (client_id) references clients (client_id),
+    constraint fk_reservations_rooms foreign key (room_id) references rooms (room_id)
 );

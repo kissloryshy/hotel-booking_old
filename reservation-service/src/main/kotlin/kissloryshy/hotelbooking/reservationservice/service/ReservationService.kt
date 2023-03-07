@@ -17,7 +17,7 @@ class ReservationService(
         return reservationRepository.findAll()
     }
 
-    fun getById(reservationId: Long): Reservation? {
-        return reservationRepository.findByReservationId(reservationId)
+    fun create(reservation: Reservation): Reservation {
+        return reservationRepository.save(reservation)
     }
 }

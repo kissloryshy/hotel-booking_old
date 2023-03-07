@@ -2,14 +2,11 @@ package kissloryshy.hotelbooking.reservationservice.controller
 
 import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
-import kissloryshy.hotelbooking.reservationservice.exception.ClientNotFoundException
+import kissloryshy.hotelbooking.reservationservice.exception.exceptions.ClientNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.ClientService
 import org.springframework.http.ResponseEntity
 import org.springframework.kafka.core.KafkaTemplate
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/clients")
@@ -38,5 +35,10 @@ class ClientController(
         } else {
             throw ClientNotFoundException("Client not found with username: $username")
         }
+    }
+
+    @PostMapping("/create")
+    fun create(@RequestBody client: Client): Client {
+        return clientService.create(client)
     }
 }

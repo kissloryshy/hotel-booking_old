@@ -2,7 +2,8 @@ package kissloryshy.hotelbooking.reservationservice.controller
 
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomCountDto
-import kissloryshy.hotelbooking.reservationservice.exception.RoomNotFoundException
+import kissloryshy.hotelbooking.reservationservice.exception.exceptions.RoomNotFoundException
+import kissloryshy.hotelbooking.reservationservice.exception.exceptions.WrongParamsException
 import kissloryshy.hotelbooking.reservationservice.service.RoomService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -30,8 +31,8 @@ class RoomControllerTest {
 
     @Test
     fun getCount() {
-        val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30), mutableSetOf())
-        val room2 = Room(2, 3, 2, true, BigDecimal(20), BigDecimal(35), mutableSetOf())
+        val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
+        val room2 = Room(2, 3, 2, true, BigDecimal(20), BigDecimal(35))
         val rooms = listOf(room1, room2)
         val roomCountDto = RoomCountDto(rooms.size.toLong())
 
@@ -51,8 +52,8 @@ class RoomControllerTest {
 
     @Test
     fun getAll() {
-        val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30), mutableSetOf())
-        val room2 = Room(2, 3, 2, true, BigDecimal(20), BigDecimal(35), mutableSetOf())
+        val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
+        val room2 = Room(2, 3, 2, true, BigDecimal(20), BigDecimal(35))
         val rooms = listOf(room1, room2)
         val roomCount = rooms.size
 
@@ -73,7 +74,7 @@ class RoomControllerTest {
 
     @Test
     fun getByRoomNumber_exists() {
-        val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30), mutableSetOf())
+        val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
 
         `when`(roomService.getByRoomNumber(1)).thenReturn(room1)
 
@@ -87,12 +88,12 @@ class RoomControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.roomNumber").value(1))
 
-        Mockito.verify(roomService, Mockito.times(1)).getByRoomNumber(id.toLong())
+        Mockito.verify(roomService, Mockito.times(1)).getByRoomNumber(id)
     }
 
     @Test
     fun getByRoomNumber_notExists() {
-        val roomNumber = "999999999999"
+        val roomNumber = "1000"
         val request =
             MockMvcRequestBuilders.get("/api/rooms/getByRoomNumber/$roomNumber").contentType(MediaType.APPLICATION_JSON)
         val result = mockMvc.perform(request)
@@ -102,6 +103,23 @@ class RoomControllerTest {
             .andExpect { res ->
                 assertEquals(
                     "Room not found with number: $roomNumber",
+                    res.resolvedException!!.message
+                )
+            }
+    }
+
+    @Test
+    fun getByRoomNumber_wrongParams() {
+        val roomNumber = "-1000"
+        val request =
+            MockMvcRequestBuilders.get("/api/rooms/getByRoomNumber/$roomNumber").contentType(MediaType.APPLICATION_JSON)
+        val result = mockMvc.perform(request)
+        result
+            .andExpect(status().isBadRequest)
+            .andExpect { res -> assertTrue(res.resolvedException is WrongParamsException) }
+            .andExpect { res ->
+                assertEquals(
+                    "Room number cannot be negative. Received number: $roomNumber",
                     res.resolvedException!!.message
                 )
             }

@@ -2,7 +2,7 @@ package kissloryshy.hotelbooking.reservationservice.controller
 
 import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
-import kissloryshy.hotelbooking.reservationservice.exception.ClientNotFoundException
+import kissloryshy.hotelbooking.reservationservice.exception.exceptions.ClientNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.ClientService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

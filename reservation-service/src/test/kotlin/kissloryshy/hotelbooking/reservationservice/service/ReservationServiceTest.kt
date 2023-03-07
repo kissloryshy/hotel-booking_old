@@ -36,8 +36,8 @@ class ReservationServiceTest {
 
     @Test
     fun getAll() {
-        val reservation1 = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
-        val reservation2 = Reservation(2, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
+        val reservation1 = Reservation(Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
+        val reservation2 = Reservation(Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
         val reservations = listOf(reservation1, reservation2)
 
         `when`(reservationRepository.findAll()).thenReturn(reservations)
@@ -45,19 +45,5 @@ class ReservationServiceTest {
         val returnedClients = reservationService.getAll()
 
         assertEquals(reservations, returnedClients)
-    }
-
-    @Test
-    fun getById() {
-        val reservation = Reservation(1, Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
-        val reservationId = 1L
-
-        `when`(reservationRepository.findByReservationId(reservationId)).thenReturn(reservation)
-
-        val returnedReservation = reservationService.getById(reservationId)
-
-        if (returnedReservation != null) {
-            assertEquals(reservationId, returnedReservation.reservationId)
-        }
     }
 }
