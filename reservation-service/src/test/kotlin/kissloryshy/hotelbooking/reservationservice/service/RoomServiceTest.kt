@@ -46,16 +46,16 @@ class RoomServiceTest {
     }
 
     @Test
-    fun getByRoomNumber_exists() {
+    fun getByNumber_exists() {
         val room = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
         val roomNumber = 1
 
-        `when`(roomRepository.findByRoomNumber(roomNumber)).thenReturn(room)
+        `when`(roomRepository.findByNumber(roomNumber)).thenReturn(room)
 
-        val returnedRoom = roomService.getByRoomNumber(roomNumber)
+        val returnedRoom = roomService.getByNumber(roomNumber)
 
         if (returnedRoom != null) {
-            assertEquals(roomNumber, returnedRoom.roomNumber)
+            assertEquals(roomNumber, returnedRoom.number)
         }
     }
 }

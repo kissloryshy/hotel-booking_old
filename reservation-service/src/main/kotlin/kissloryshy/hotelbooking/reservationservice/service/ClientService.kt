@@ -2,26 +2,31 @@ package kissloryshy.hotelbooking.reservationservice.service
 
 import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
+import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
+import kissloryshy.hotelbooking.reservationservice.mapper.ClientMapper
 import kissloryshy.hotelbooking.reservationservice.repository.ClientRepository
+import org.mapstruct.factory.Mappers
 import org.springframework.stereotype.Service
 
 @Service
 class ClientService(
     private val clientRepository: ClientRepository
 ) {
+    private val converter = Mappers.getMapper(ClientMapper::class.java)
+
     fun getCount(): ClientCountDto {
         return ClientCountDto(clientRepository.count())
     }
 
-    fun getAll(): List<Client> {
-        return clientRepository.findAll()
+    fun getAll(): List<ClientDto> {
+        return clientRepository.findAll().map { converter.toDto(it) }
     }
 
-    fun getByUsername(username: String): Client? {
-        return clientRepository.findClientByUsername(username)
+    fun getByUsername(username: String): ClientDto? {
+        return clientRepository.findClientByUsername(username)?.let { converter.toDto(it) }
     }
 
-    fun create(client: Client): Client {
-        return clientRepository.save(client)
+    fun create(clientDto: ClientDto): ClientDto {
+        return converter.toDto(clientRepository.save(converter.toModel(clientDto)))
     }
 }

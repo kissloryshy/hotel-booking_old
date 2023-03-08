@@ -14,12 +14,12 @@ open class Room() {
     open var roomId: Long? = null
 
     @NotNull
-    @Column(name = "room_number", nullable = false)
-    open var roomNumber: Int? = null
+    @Column(name = "number", nullable = false)
+    open var number: Int? = null
 
     @NotNull
-    @Column(name = "room_capacity", nullable = false)
-    open var roomCapacity: Int? = null
+    @Column(name = "capacity", nullable = false)
+    open var capacity: Int? = null
 
     @NotNull
     @Column(name = "class", nullable = false)
@@ -37,20 +37,20 @@ open class Room() {
     @Column(name = "holiday_cost", nullable = false, precision = 12, scale = 2)
     open var holidayCost: BigDecimal? = null
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "room")
     @OneToMany(mappedBy = "room")
     open var reservations: MutableSet<Reservation> = mutableSetOf()
 
     constructor(
-        roomNumber: Int?,
-        roomCapacity: Int?,
+        number: Int?,
+        capacity: Int?,
         classField: Int?,
         isEnabled: Boolean?,
         weekdayCost: BigDecimal?,
         holidayCost: BigDecimal?
     ) : this() {
-        this.roomNumber = roomNumber
-        this.roomCapacity = roomCapacity
+        this.number = number
+        this.capacity = capacity
         this.classField = classField
         this.isEnabled = isEnabled
         this.weekdayCost = weekdayCost

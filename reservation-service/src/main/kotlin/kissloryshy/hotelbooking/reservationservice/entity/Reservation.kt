@@ -13,13 +13,13 @@ open class Reservation() {
     @Column(name = "reservation_id", nullable = false)
     open var reservationId: Long? = null
 
-    @JsonBackReference
+    @JsonBackReference(value = "client")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     open var client: Client? = null
 
-    @JsonBackReference
+    @JsonBackReference(value = "room")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "room_id", nullable = false)

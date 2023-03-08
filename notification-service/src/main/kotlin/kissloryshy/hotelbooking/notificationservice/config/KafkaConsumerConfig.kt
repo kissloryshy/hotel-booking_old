@@ -1,6 +1,6 @@
 package kissloryshy.hotelbooking.notificationservice.config
 
-import kissloryshy.hotelbooking.notificationservice.entity.Client
+import kissloryshy.hotelbooking.notificationservice.entity.ClientDto
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
@@ -24,6 +24,7 @@ class KafkaConsumerConfig {
         props[ConsumerConfig.GROUP_ID_CONFIG] = "messageId"
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
+        props[JsonDeserializer.TRUSTED_PACKAGES] = "*"
         return DefaultKafkaConsumerFactory(props)
     }
 
@@ -37,21 +38,22 @@ class KafkaConsumerConfig {
     }
 
     @Bean
-    fun clientConsumerFactory(): ConsumerFactory<String, Client> {
+    fun clientDtoConsumerFactory(): ConsumerFactory<String, ClientDto> {
         val props: MutableMap<String, Any> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapServer
-        props[ConsumerConfig.GROUP_ID_CONFIG] = "clientGroupId"
+        props[ConsumerConfig.GROUP_ID_CONFIG] = "clientDtoGroupId"
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = JsonDeserializer::class.java
+        props[JsonDeserializer.TRUSTED_PACKAGES] = "*"
         return DefaultKafkaConsumerFactory(props)
     }
 
     @Bean
-    fun clientKafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, Client>? {
-        val factory = ConcurrentKafkaListenerContainerFactory<String, Client>()
+    fun clientDtoKafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, ClientDto>? {
+        val factory = ConcurrentKafkaListenerContainerFactory<String, ClientDto>()
         factory.containerProperties.ackMode = ContainerProperties.AckMode.MANUAL_IMMEDIATE
         factory.containerProperties.isSyncCommits = true
-        factory.consumerFactory = clientConsumerFactory()
+        factory.consumerFactory = clientDtoConsumerFactory()
         return factory
     }
 }

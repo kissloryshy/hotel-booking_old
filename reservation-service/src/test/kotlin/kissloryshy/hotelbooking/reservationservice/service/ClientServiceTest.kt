@@ -2,9 +2,12 @@ package kissloryshy.hotelbooking.reservationservice.service
 
 import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
+import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
+import kissloryshy.hotelbooking.reservationservice.mapper.ClientMapper
 import kissloryshy.hotelbooking.reservationservice.repository.ClientRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.mapstruct.factory.Mappers
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
@@ -34,20 +37,31 @@ class ClientServiceTest {
 
     @Test
     fun getAll() {
-        val client1 = Client("testUn1", "testFn1", "testLn1", "testEm1", "testPn1", LocalDate.now(), mutableSetOf())
-        val client2 = Client("testUn2", "testFn2", "testLn2", "testEm2", "testPn2", LocalDate.now(), mutableSetOf())
-        val clients = listOf(client1, client2)
+        val client1 =
+            ClientDto("testUn1", "testFn1", "testLn1", "kissloryshy1@gmail.com", "+79044477899", LocalDate.now())
+        val client2 =
+            ClientDto("testUn2", "testFn2", "testLn2", "kissloryshy2@gmail.com", "+79044477899", LocalDate.now())
+        val clientDtoList = mutableListOf(client1, client2)
+        val converter = Mappers.getMapper(ClientMapper::class.java)
+        val clientEntityList = mutableListOf(converter.toModel(client1), converter.toModel(client2))
 
-        `when`(clientRepository.findAll()).thenReturn(clients)
+        `when`(clientRepository.findAll()).thenReturn(clientEntityList)
 
         val returnedClients = clientService.getAll()
 
-        assertEquals(clients, returnedClients)
+        assertEquals(clientDtoList, returnedClients)
     }
 
     @Test
     fun getByUsername() {
-        val client = Client("testUn1", "testFn1", "testLn1", "testEm1", "testPn1", LocalDate.now(), mutableSetOf())
+        val client = Client()
+        client.clientId = 1
+        client.username = "testUn1"
+        client.firstName = "testFn1"
+        client.lastName = "testLn1"
+        client.email = "kissloryshy1@gmail.com"
+        client.phoneNumber = "+79044477899"
+        client.birthdate = LocalDate.now()
         val username = "testUn1"
 
         `when`(clientRepository.findClientByUsername(username)).thenReturn(client)

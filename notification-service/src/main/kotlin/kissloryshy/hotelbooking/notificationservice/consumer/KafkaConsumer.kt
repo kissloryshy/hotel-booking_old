@@ -1,6 +1,6 @@
 package kissloryshy.hotelbooking.notificationservice.consumer
 
-import kissloryshy.hotelbooking.notificationservice.entity.Client
+import kissloryshy.hotelbooking.notificationservice.entity.ClientDto
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
@@ -19,11 +19,11 @@ class KafkaConsumer {
     }
 
     @KafkaListener(
-        topics = ["clientTopic"],
-        groupId = "clientGroupId",
-        containerFactory = "clientKafkaListenerContainerFactory"
+        topics = ["clientDtoTopic"],
+        groupId = "clientDtoGroupId",
+        containerFactory = "clientDtoKafkaListenerContainerFactory"
     )
-    fun clientNotification(client: Client) {
-        logger.info("Client received {}", client)
+    fun clientNotification(clientDto: ClientDto) {
+        logger.info("Client received {}", clientDto)
     }
 }

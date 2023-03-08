@@ -17,8 +17,8 @@ class RoomService(
         return roomRepository.findAll()
     }
 
-    fun getByRoomNumber(roomNumber: Int): Room? {
-        return roomRepository.findByRoomNumber(roomNumber)
+    fun getByNumber(roomNumber: Int): Room? {
+        return roomRepository.findByNumber(roomNumber)
     }
 
     fun create(room: Room): Room {

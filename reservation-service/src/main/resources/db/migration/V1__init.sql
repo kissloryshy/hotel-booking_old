@@ -1,12 +1,12 @@
 create table clients
 (
-    client_id    bigserial    not null primary key,
-    username     varchar(128) not null,
-    first_name   varchar(128) not null,
-    last_name    varchar(128) not null,
-    email        varchar(128) not null,
-    phone_number varchar(30)  not null,
-    birthdate    DATE         not null
+    client_id    bigserial   not null primary key,
+    username     varchar(32) not null unique,
+    first_name   varchar(32) not null,
+    last_name    varchar(32) not null,
+    email        varchar(32) not null,
+    phone_number varchar(20) not null,
+    birthdate    DATE        not null
 );
 
 insert into clients (username, first_name, last_name, email, phone_number, birthdate)
@@ -16,16 +16,16 @@ VALUES ('kissloryshy', 'lory', 'kiss', 'kiss@gmail.com', '+79044479988', '1998-0
 
 create table rooms
 (
-    room_id       bigserial      not null primary key,
-    room_number   integer        not null,
-    room_capacity integer        not null,
-    class         integer        not null,
-    is_enabled    boolean        not null,
-    weekday_cost  numeric(12, 2) not null,
-    holiday_cost  numeric(12, 2) not null
+    room_id      bigserial      not null primary key,
+    number       integer        not null,
+    capacity     integer        not null,
+    class        integer        not null,
+    is_enabled   boolean        not null,
+    weekday_cost numeric(12, 2) not null,
+    holiday_cost numeric(12, 2) not null
 );
 
-insert into rooms (room_number, room_capacity, class, is_enabled, weekday_cost, holiday_cost)
+insert into rooms (number, capacity, class, is_enabled, weekday_cost, holiday_cost)
 VALUES (1, 1, 1, true, '1500', '1900'),
        (2, 3, 1, true, '3500', '4750'),
        (3, 2, 2, false, '2000', '2500'),

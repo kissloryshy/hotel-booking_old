@@ -1,9 +1,9 @@
 package kissloryshy.hotelbooking.reservationservice.controller
 
+import jakarta.validation.Valid
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomCountDto
 import kissloryshy.hotelbooking.reservationservice.exception.exceptions.RoomNotFoundException
-import kissloryshy.hotelbooking.reservationservice.exception.exceptions.WrongParamsException
 import kissloryshy.hotelbooking.reservationservice.service.RoomService
 import org.springframework.web.bind.annotation.*
 
@@ -19,16 +19,14 @@ class RoomController(
 
     @GetMapping("/getAll")
     fun getAll(): List<Room> {
+//        TODO paginated
         return roomService.getAll()
     }
 
-    @GetMapping("/getByRoomNumber/{roomNumber}")
-    fun getByRoomNumber(@PathVariable(value = "roomNumber") roomNumber: Int): Room {
-        if (roomNumber < 0L) {
-            throw WrongParamsException("Room number cannot be negative. Received number: $roomNumber")
-        }
+    @GetMapping("/getByNumber/{roomNumber}")
+    fun getByRoomNumber(@Valid @PathVariable(value = "roomNumber") roomNumber: Int): Room {
 
-        return roomService.getByRoomNumber(roomNumber)
+        return roomService.getByNumber(roomNumber)
             ?: throw RoomNotFoundException("Room not found with number: $roomNumber")
     }
 

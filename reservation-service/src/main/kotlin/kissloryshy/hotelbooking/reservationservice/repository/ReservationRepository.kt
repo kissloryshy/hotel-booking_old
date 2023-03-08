@@ -6,4 +6,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ReservationRepository : JpaRepository<Reservation, Long> {
+
+    fun findByClient_Username(username: String): List<Reservation>
+
+
+    fun findByRoom_Number(number: Int): List<Reservation>
 }

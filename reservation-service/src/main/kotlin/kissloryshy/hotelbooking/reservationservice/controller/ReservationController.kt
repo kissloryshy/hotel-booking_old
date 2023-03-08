@@ -1,8 +1,9 @@
 package kissloryshy.hotelbooking.reservationservice.controller
 
-import kissloryshy.hotelbooking.reservationservice.entity.Reservation
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationCountDto
+import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationDto
 import kissloryshy.hotelbooking.reservationservice.service.ReservationService
+import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
@@ -18,12 +19,24 @@ class ReservationController(
     }
 
     @GetMapping("/getAll")
-    fun getAll(): List<Reservation> {
+    fun getAll(): List<ReservationDto> {
+//        TODO paginated
         return reservationService.getAll()
     }
 
-    @PostMapping("/create")
-    fun create(@RequestBody reservation: Reservation): Reservation {
-        return reservationService.create(reservation)
+    @GetMapping("/getByClientUsername/{username}")
+    fun getByClientUsername(@PathVariable("username") username: String): ResponseEntity<List<ReservationDto>> {
+        return ResponseEntity.ok(reservationService.getByClientUsername(username))
     }
+
+    @GetMapping("/getByRoomNumber/{number}")
+    fun getByRoomNumber(@PathVariable("number") number: Int): ResponseEntity<List<ReservationDto>> {
+        return ResponseEntity.ok(reservationService.getByRoomNumber(number))
+    }
+
+    @PostMapping("/create")
+    fun create(@RequestBody reservationDto: ReservationDto): ResponseEntity<ReservationDto> {
+        return ResponseEntity.ok(reservationService.create(reservationDto))
+    }
+
 }
