@@ -6,6 +6,9 @@ import org.mapstruct.Mapper
 
 @Mapper
 interface ReservationMapper {
+
     fun toDto(reservation: Reservation): ReservationDto
+
     fun toModel(reservationDto: ReservationDto): Reservation
+
 }

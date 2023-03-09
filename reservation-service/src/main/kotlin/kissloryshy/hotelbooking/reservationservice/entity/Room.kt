@@ -42,6 +42,7 @@ open class Room() {
     open var reservations: MutableSet<Reservation> = mutableSetOf()
 
     constructor(
+        roomId: Long?,
         number: Int?,
         capacity: Int?,
         classField: Int?,
@@ -49,6 +50,7 @@ open class Room() {
         weekdayCost: BigDecimal?,
         holidayCost: BigDecimal?
     ) : this() {
+        this.roomId = roomId
         this.number = number
         this.capacity = capacity
         this.classField = classField
@@ -56,4 +58,5 @@ open class Room() {
         this.weekdayCost = weekdayCost
         this.holidayCost = holidayCost
     }
+
 }

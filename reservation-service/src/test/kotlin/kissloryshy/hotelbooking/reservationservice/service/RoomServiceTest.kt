@@ -34,8 +34,8 @@ class RoomServiceTest {
 
     @Test
     fun getAll() {
-        val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
-        val room2 = Room(2, 3, 2, true, BigDecimal(20), BigDecimal(35))
+        val room1 = Room(1, 1, 1, 1, true, BigDecimal(15), BigDecimal(30))
+        val room2 = Room(2, 2, 3, 2, true, BigDecimal(20), BigDecimal(35))
         val rooms = listOf(room1, room2)
 
         `when`(roomRepository.findAll()).thenReturn(rooms)
@@ -47,7 +47,7 @@ class RoomServiceTest {
 
     @Test
     fun getByNumber_exists() {
-        val room = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
+        val room = Room(1, 1, 1, 1, true, BigDecimal(15), BigDecimal(30))
         val roomNumber = 1
 
         `when`(roomRepository.findByNumber(roomNumber)).thenReturn(room)

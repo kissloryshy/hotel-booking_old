@@ -1,15 +1,15 @@
 package kissloryshy.hotelbooking.reservationservice.controller
 
+import jakarta.validation.Valid
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationCountDto
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationDto
 import kissloryshy.hotelbooking.reservationservice.service.ReservationService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/reservations")
-@Validated
 class ReservationController(
     private val reservationService: ReservationService
 ) {
@@ -35,8 +35,8 @@ class ReservationController(
     }
 
     @PostMapping("/create")
-    fun create(@RequestBody reservationDto: ReservationDto): ResponseEntity<ReservationDto> {
-        return ResponseEntity.ok(reservationService.create(reservationDto))
+    fun create(@Valid @RequestBody reservationDto: ReservationDto): ResponseEntity<ReservationDto> {
+        return ResponseEntity(reservationService.create(reservationDto), HttpStatus.CREATED)
     }
 
 }

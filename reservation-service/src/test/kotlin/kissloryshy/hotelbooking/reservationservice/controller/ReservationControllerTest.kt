@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.Room
-import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
-import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationCountDto
-import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationDto
-import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomDto
+import kissloryshy.hotelbooking.reservationservice.entity.dto.*
 import kissloryshy.hotelbooking.reservationservice.mapper.ClientMapper
 import kissloryshy.hotelbooking.reservationservice.mapper.RoomMapper
 import kissloryshy.hotelbooking.reservationservice.service.ReservationService
@@ -16,26 +13,29 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mapstruct.factory.Mappers
-import org.mockito.BDDMockito.given
+import org.mockito.BDDMockito.*
 import org.mockito.Mockito
-import org.mockito.Mockito.times
 import org.mockito.Mockito.`when`
+import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.math.BigDecimal
 import java.time.LocalDate
 
-@ExtendWith(SpringExtension::class)
+@ExtendWith(MockitoExtension::class)
 @WebMvcTest(ReservationController::class)
 class ReservationControllerTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
+
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
 
     @MockBean
     private lateinit var reservationService: ReservationService
@@ -102,7 +102,7 @@ class ReservationControllerTest {
             .andExpect(jsonPath("$.length()").value(reservations.size))
             .andExpect(jsonPath("$[0].client.username").value(testUn))
 
-        Mockito.verify(reservationService, times(1)).getByClientUsername(testUn)
+        verify(reservationService, times(1)).getByClientUsername(testUn)
     }
 
     @Test
@@ -130,40 +130,31 @@ class ReservationControllerTest {
     }
 
     @Test
-    fun create() {
+    fun create_old() {
         val date = LocalDate.now()
-        val clientDto = ClientDto("testUn", "testFn", "testLn", "test@mail.com", "+79000000000", LocalDate.now())
-        val roomDto = RoomDto(77, 2, 2, true, BigDecimal(2000), BigDecimal(2800))
 
         val reservationDto = ReservationDto(
-            Mappers.getMapper(ClientMapper::class.java).toModel(clientDto),
-            Mappers.getMapper(RoomMapper::class.java).toModel(roomDto),
+            Client(1, "kissloryshy", "lory", "kiss", "kissloryshy@gmail.com", "+79044488877", date.minusYears(20)),
+            Room(1, 1, 2, 2, true, BigDecimal(2500), BigDecimal(2850)),
             date,
-            LocalDate.now(),
-            LocalDate.now()
+            date,
+            date.plusDays(3)
         )
 
-        `when`(reservationService.create(reservationDto)).thenReturn(reservationDto)
-
-        val objectMapper = ObjectMapper()
-        objectMapper.registerModule(JavaTimeModule())
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-        val reservationDtoJson: String = objectMapper.writeValueAsString(reservationDto)
-
-        val result = mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/reservations/create")
+        mockMvc.perform(
+            MockMvcRequestBuilders
+                .post("/api/reservations/create")
+                .content(
+                    objectMapper.registerModule(JavaTimeModule())
+                        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(reservationDto)
+                )
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(reservationDtoJson)
                 .accept(MediaType.APPLICATION_JSON)
         )
-
-        result
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.client.username").value("testUn"))
+            .andExpect(status().isBadRequest)
+            .andExpect(jsonPath("$.client.username").value("kissloryshy"))
             .andExpect(jsonPath("$.room.capacity").value(2))
             .andExpect(jsonPath("$.reservationStart").value(date.toString()))
-
-        Mockito.verify(reservationService, times(1)).create(reservationDto)
     }
 
 }

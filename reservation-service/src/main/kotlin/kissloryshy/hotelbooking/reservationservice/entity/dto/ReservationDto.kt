@@ -14,32 +14,27 @@ import java.time.LocalDate
 data class ReservationDto(
 
     @field:NotNull
-    @field:NotBlank(message = "Invalid client: empty client")
     val client: Client,
 
     @field:NotNull
-    @field:NotBlank(message = "Invalid room: empty room")
     val room: Room,
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonSerialize(using = LocalDateSerializer::class)
     @JsonDeserialize(using = LocalDateDeserializer::class)
     @field:NotNull
-    @field:NotBlank(message = "Invalid contractSigned: empty contractSigned")
     val contractSigned: LocalDate,
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonSerialize(using = LocalDateSerializer::class)
     @JsonDeserialize(using = LocalDateDeserializer::class)
     @field:NotNull
-    @field:NotBlank(message = "Invalid reservationStart: empty reservationStart")
     val reservationStart: LocalDate,
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonSerialize(using = LocalDateSerializer::class)
     @JsonDeserialize(using = LocalDateDeserializer::class)
     @field:NotNull
-    @field:NotBlank(message = "Invalid reservationEnd: empty reservationEnd")
     val reservationEnd: LocalDate
 
 )

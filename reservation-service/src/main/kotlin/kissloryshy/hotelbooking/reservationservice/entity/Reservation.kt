@@ -50,4 +50,5 @@ open class Reservation() {
         this.reservationStart = reservationStart
         this.reservationEnd = reservationEnd
     }
+
 }

@@ -46,4 +46,5 @@ class ClientController(
     fun create(@Valid @RequestBody clientDto: ClientDto): ResponseEntity<ClientDto> {
         return ResponseEntity(clientService.create(clientDto), HttpStatus.CREATED)
     }
+
 }

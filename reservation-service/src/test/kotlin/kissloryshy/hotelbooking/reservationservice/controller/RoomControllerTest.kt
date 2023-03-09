@@ -31,8 +31,8 @@ class RoomControllerTest {
 
     @Test
     fun getCount() {
-        val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
-        val room2 = Room(2, 3, 2, true, BigDecimal(20), BigDecimal(35))
+        val room1 = Room(1, 1, 1, 1, true, BigDecimal(15), BigDecimal(30))
+        val room2 = Room(1, 2, 3, 2, true, BigDecimal(20), BigDecimal(35))
         val rooms = listOf(room1, room2)
         val roomCountDto = RoomCountDto(rooms.size.toLong())
 
@@ -51,8 +51,8 @@ class RoomControllerTest {
 
     @Test
     fun getAll() {
-        val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
-        val room2 = Room(2, 3, 2, true, BigDecimal(20), BigDecimal(35))
+        val room1 = Room(1, 1, 1, 1, true, BigDecimal(15), BigDecimal(30))
+        val room2 = Room(1, 2, 3, 2, true, BigDecimal(20), BigDecimal(35))
         val rooms = listOf(room1, room2)
         val roomCount = rooms.size
 
@@ -74,7 +74,7 @@ class RoomControllerTest {
 
     @Test
     fun getByNumber_exists() {
-        val room1 = Room(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
+        val room1 = Room(1, 1, 1, 1, true, BigDecimal(15), BigDecimal(30))
 
         `when`(roomService.getByNumber(1)).thenReturn(room1)
 

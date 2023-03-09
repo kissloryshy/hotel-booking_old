@@ -34,21 +34,22 @@ open class Client() {
     @OneToMany(mappedBy = "client")
     open var reservations: MutableSet<Reservation> = mutableSetOf()
 
-//    constructor(
-//        username: String?,
-//        firstName: String?,
-//        lastName: String?,
-//        email: String?,
-//        phoneNumber: String?,
-//        birthdate: LocalDate?,
-//        reservations: MutableSet<Reservation>
-//    ) : this() {
-//        this.username = username
-//        this.firstName = firstName
-//        this.lastName = lastName
-//        this.email = email
-//        this.phoneNumber = phoneNumber
-//        this.birthdate = birthdate
-//        this.reservations = reservations
-//    }
+    constructor(
+        clientId: Long?,
+        username: String?,
+        firstName: String?,
+        lastName: String?,
+        email: String?,
+        phoneNumber: String?,
+        birthdate: LocalDate?
+    ) : this() {
+        this.clientId = clientId
+        this.username = username
+        this.firstName = firstName
+        this.lastName = lastName
+        this.email = email
+        this.phoneNumber = phoneNumber
+        this.birthdate = birthdate
+    }
+
 }

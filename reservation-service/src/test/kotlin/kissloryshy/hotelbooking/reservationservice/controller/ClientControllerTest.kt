@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.LocalDate
 
-
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(ClientController::class)
 class ClientControllerTest {
@@ -170,7 +169,7 @@ class ClientControllerTest {
             .andExpect(jsonPath("$.username").value("username"))
             .andExpect(jsonPath("$.birthdate").value(date.toString()))
 
-        Mockito.verify(clientService, times(1)).create(clientDto)
+        verify(clientService, times(1)).create(clientDto)
     }
 
 }

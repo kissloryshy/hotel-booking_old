@@ -7,8 +7,10 @@ import org.mapstruct.Mapping
 
 @Mapper
 interface ClientMapper {
+
     fun toDto(client: Client): ClientDto
-    @Mapping(target = "clientId", ignore = true)
+
+    @Mapping(target = "reservations", ignore = true)
     fun toModel(clientDto: ClientDto): Client
 
 }

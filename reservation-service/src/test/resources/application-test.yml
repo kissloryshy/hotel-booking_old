@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    username: ${CONTAINER.USERNAME}
+    password: ${CONTAINER.PASSWORD}
+    url: ${CONTAINER.URL}
+
+flyway:
+  user: ${CONTAINER.USERNAME}
+  password: ${CONTAINER.PASSWORD}
+  url: ${CONTAINER.URL}
