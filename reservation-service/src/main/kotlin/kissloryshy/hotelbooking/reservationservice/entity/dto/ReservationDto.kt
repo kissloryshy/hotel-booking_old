@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
-import jakarta.validation.constraints.NotBlank
 import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import org.jetbrains.annotations.NotNull

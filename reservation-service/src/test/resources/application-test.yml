@@ -1,10 +1,13 @@
 spring:
   datasource:
-    username: ${CONTAINER.USERNAME}
-    password: ${CONTAINER.PASSWORD}
-    url: ${CONTAINER.URL}
+    url: jdbc:postgresql://localhost:10100/hotel-booking?currentSchema=public
+    username: postgres
+    password: 1212
 
-flyway:
-  user: ${CONTAINER.USERNAME}
-  password: ${CONTAINER.PASSWORD}
-  url: ${CONTAINER.URL}
+#flyway:
+#  user: postgres
+#  password: 1212
+#  url: jdbc:postgresql://localhost:5432/hotel-booking?currentSchema=public&user=postgres&password=1212
+#  shemas: public
+#  driver: org.postgresql.Driver
+#  cleanDisabled: false

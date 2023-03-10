@@ -1,6 +1,5 @@
 package kissloryshy.hotelbooking.reservationservice.service
 
-import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
 import kissloryshy.hotelbooking.reservationservice.mapper.ClientMapper

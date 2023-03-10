@@ -1,15 +1,13 @@
 package kissloryshy.hotelbooking.reservationservice.controller
 
 import jakarta.validation.Valid
-import kissloryshy.hotelbooking.reservationservice.entity.Client
-import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
+import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
 import kissloryshy.hotelbooking.reservationservice.exception.exceptions.ClientNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.ClientService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.kafka.core.KafkaTemplate
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
