@@ -1,6 +1,5 @@
 package kissloryshy.hotelbooking.reservationservice.config
 
-import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
@@ -9,7 +8,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
-import org.springframework.kafka.support.serializer.JsonSerializer
 
 @Configuration
 class KafkaProducerConfig {
@@ -31,16 +29,16 @@ class KafkaProducerConfig {
     }
 
     @Bean
-    fun clientDtoProducerFactory(): ProducerFactory<String, ClientDto> {
+    fun clientDtoProducerFactory(): ProducerFactory<String, String> {
         val configProps: MutableMap<String, Any> = HashMap()
         configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapServer
         configProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
-        configProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = JsonSerializer::class.java
+        configProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         return DefaultKafkaProducerFactory(configProps)
     }
 
     @Bean
-    fun clientDtoKafkaTemplate(): KafkaTemplate<String, ClientDto> {
+    fun clientDtoKafkaTemplate(): KafkaTemplate<String, String> {
         return KafkaTemplate(clientDtoProducerFactory())
     }
 }

@@ -1,10 +1,14 @@
 package kissloryshy.hotelbooking.reservationservice.controller
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import jakarta.validation.Valid
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
 import kissloryshy.hotelbooking.reservationservice.exception.exceptions.ClientNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.ClientService
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.kafka.core.KafkaTemplate
@@ -14,8 +18,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/clients")
 class ClientController(
     private val clientService: ClientService,
-    private val kafkaTemplate: KafkaTemplate<String, String>,
-    private val clientKafkaTemplate: KafkaTemplate<String, ClientDto>
+    @Qualifier("messageKafkaTemplate") private val kafkaTemplate: KafkaTemplate<String, String>,
+    @Qualifier("clientDtoKafkaTemplate") private val clientKafkaTemplate: KafkaTemplate<String, String>
 ) {
     @GetMapping("/getCount")
     fun getCount(): ClientCountDto {
@@ -33,7 +37,13 @@ class ClientController(
     fun getByUsername(@PathVariable(value = "username") username: String): ResponseEntity<ClientDto> {
         val clientDto: ClientDto? = clientService.getByUsername(username)
         if (clientDto != null) {
-//            clientKafkaTemplate.send("clientDtoTopic", clientDto)
+            clientKafkaTemplate.send(
+                "clientDtoTopic",
+                ObjectMapper()
+                    .registerModule(JavaTimeModule())
+                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                    .writeValueAsString(clientDto)
+            )
             return ResponseEntity.ok(clientDto)
         } else {
             throw ClientNotFoundException("Client not found with username: $username")

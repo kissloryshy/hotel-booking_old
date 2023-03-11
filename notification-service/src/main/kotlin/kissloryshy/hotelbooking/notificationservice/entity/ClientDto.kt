@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
-import org.jetbrains.annotations.NotNull
 import java.time.LocalDate
 
 data class ClientDto(
@@ -25,4 +24,9 @@ data class ClientDto(
     @JsonDeserialize(using = LocalDateDeserializer::class)
     val birthdate: LocalDate
 
-)
+) {
+
+    // Empty constructor for ObjectMapper
+    constructor() : this("", "", "", "", "", LocalDate.now())
+
+}
