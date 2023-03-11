@@ -1,13 +1,18 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:10100/hotel-booking?currentSchema=public
-    username: postgres
-    password: 1212
-
-#flyway:
-#  user: postgres
-#  password: 1212
-#  url: jdbc:postgresql://localhost:5432/hotel-booking?currentSchema=public&user=postgres&password=1212
-#  shemas: public
-#  driver: org.postgresql.Driver
-#  cleanDisabled: false
+#    driver-class-name: org.postgresql.Driver
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:tc:postgresql:11.6:///hotel-booking
+    hikari:
+      max-lifetime: 500000
+      connection-timeout: 300000
+      idle-timeout: 600000
+      maximum-pool-size: 5
+      minimum-idle: 1
+  flyway:
+    enabled: true
+    locations: 'classpath:db/migration'
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect

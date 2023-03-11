@@ -42,3 +42,6 @@ create table reservations
     constraint fk_reservations_clients foreign key (client_id) references clients (client_id),
     constraint fk_reservations_rooms foreign key (room_id) references rooms (room_id)
 );
+
+insert into reservations (client_id, room_id, contract_signed, reservation_start, reservation_end)
+values (1, 2, '2023-02-01', '2023-06-01', '2023-06-22');

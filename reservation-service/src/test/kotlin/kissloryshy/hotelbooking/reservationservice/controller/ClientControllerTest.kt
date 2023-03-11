@@ -8,6 +8,7 @@ import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
 import kissloryshy.hotelbooking.reservationservice.exception.exceptions.ClientNotFoundException
 import kissloryshy.hotelbooking.reservationservice.service.ClientService
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.*
@@ -40,6 +41,7 @@ class ClientControllerTest {
     private lateinit var clientService: ClientService
 
     @Test
+    @Order(1)
     fun getCount() {
         val client1 =
             ClientDto("testUn1", "testFn1", "testLn1", "kissloryshy1@gmail.com", "+79044477899", LocalDate.now())
@@ -63,6 +65,7 @@ class ClientControllerTest {
     }
 
     @Test
+    @Order(2)
     fun getAll() {
         val client1 =
             ClientDto("testUn1", "testFn1", "testLn1", "kissloryshy1@gmail.com", "+79044477899", LocalDate.now())
@@ -87,6 +90,7 @@ class ClientControllerTest {
     }
 
     @Test
+    @Order(3)
     fun getByUsername_exists() {
         val un = "username"
         val client = ClientDto(un, "testFn1", "testLn1", "kissloryshy1@gmail.com", "+79044477899", LocalDate.now())
@@ -108,6 +112,7 @@ class ClientControllerTest {
     }
 
     @Test
+    @Order(4)
     fun getByUsername_notExists() {
         val username = "ff2158bb-800a-4c1b-b0dd-4d2b55b9f3c0"
         val request =
@@ -127,6 +132,7 @@ class ClientControllerTest {
     }
 
     @Test
+    @Order(5)
     fun getByUsername_argumentNotValid() {
         val username = "-"
         val request =
@@ -146,6 +152,7 @@ class ClientControllerTest {
     }
 
     @Test
+    @Order(6)
     fun create() {
         val date = LocalDate.now()
         val clientDto = ClientDto("username", "testFn1", "testLn1", "kissloryshy1@gmail.com", "+79044477899", date)

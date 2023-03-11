@@ -10,6 +10,7 @@ import kissloryshy.hotelbooking.reservationservice.mapper.ClientMapper
 import kissloryshy.hotelbooking.reservationservice.mapper.RoomMapper
 import kissloryshy.hotelbooking.reservationservice.service.ReservationService
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mapstruct.factory.Mappers
@@ -40,6 +41,7 @@ class ReservationControllerTest {
     private lateinit var reservationService: ReservationService
 
     @Test
+    @Order(1)
     fun getCount() {
         val reservation1 = ReservationDto(Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
         val reservation2 = ReservationDto(Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
@@ -61,6 +63,7 @@ class ReservationControllerTest {
     }
 
     @Test
+    @Order(2)
     fun getAll() {
         val reservation1 = ReservationDto(Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
         val reservation2 = ReservationDto(Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
@@ -81,6 +84,7 @@ class ReservationControllerTest {
     }
 
     @Test
+    @Order(3)
     fun getByClientUsername() {
         val testUn = "holla-amigo"
         val clientDto = ClientDto(testUn, "testFn", "testLn", "test@mail.com", "+79000000000", LocalDate.now())
@@ -105,6 +109,7 @@ class ReservationControllerTest {
     }
 
     @Test
+    @Order(4)
     fun getByRoomNumber() {
         val testNumber = 7
         val roomDto = RoomDto(testNumber, 2, 2, true, BigDecimal(2000), BigDecimal(2800))
@@ -129,6 +134,7 @@ class ReservationControllerTest {
     }
 
     @Test
+    @Order(5)
     fun create_old() {
         val date = LocalDate.now()
 

@@ -8,34 +8,51 @@ import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationDto
 import kissloryshy.hotelbooking.reservationservice.repository.ReservationRepository
 import org.junit.jupiter.api.*
+import org.junit.runner.RunWith
+import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.math.BigDecimal
 import java.time.LocalDate
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
+import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.junit.jupiter.Container
 
-@Testcontainers
-@SpringBootTest
-@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
-class ReservationControllerTestcontainers : AbstractIntegrationTest() {
-
-    @Autowired
-    lateinit var reservationRepository: ReservationRepository
+@AutoConfigureMockMvc
+@RunWith(SpringRunner::class)
+@Testcontainers
+class ReservationControllerTestcontainers {
 
     @Autowired
     lateinit var mockMvc: MockMvc
 
-    @BeforeEach
-    fun setUp() {
-        reservationRepository.count()
+    @LocalServerPort
+    final val portNumber = 0
+
+    val baseUrl = "http://localhost:$portNumber"
+
+    companion object {
+        @Container
+        var postgreSQL: PostgreSQLContainer<*> = PostgreSQLContainer<Nothing>("postgres:15.2")
+
+        @DynamicPropertySource
+        fun postgreSQLProperties(registry: DynamicPropertyRegistry) {
+            registry.add("spring.datasource.driver-class-name") { postgreSQL.driverClassName }
+            registry.add("spring.datasource.username") { postgreSQL.username }
+            registry.add("spring.datasource.password") { postgreSQL.password }
+        }
     }
 
     @Test
@@ -53,7 +70,7 @@ class ReservationControllerTestcontainers : AbstractIntegrationTest() {
 
         val result = mockMvc.perform(
             MockMvcRequestBuilders
-                .post("/api/reservations/create")
+                .post("$baseUrl$portNumber/api/reservations/create")
                 .content(
                     ObjectMapper().registerModule(JavaTimeModule())
                         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(reservationDto)
@@ -68,6 +85,12 @@ class ReservationControllerTestcontainers : AbstractIntegrationTest() {
             .andExpect(MockMvcResultMatchers.jsonPath("$.reservationStart").value(date.toString()))
 
         println(result.andReturn().response.contentAsString)
+    }
+
+    @Test
+    @Order(2)
+    fun test_test() {
+
     }
 
 }
