@@ -15,6 +15,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import java.math.BigDecimal
 import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
@@ -52,17 +53,79 @@ class ReservationServiceTest {
 
     @Test
     fun getByClientUsername() {
+        val username = "kiss"
+        val roomCap = 2
+        val client = Client(
+            1,
+            username,
+            "firstName",
+            "lastName",
+            "kissloryshy@gmail.com",
+            "+79044455677",
+            LocalDate.now().minusYears(25)
+        )
+        val room = Room(1, 7, roomCap, 2, true, BigDecimal(10000), BigDecimal(16000))
+        val reservation = Reservation(client, room, LocalDate.now(), LocalDate.now(), LocalDate.now().plusWeeks(1))
+        val reservations = mutableListOf(reservation)
 
+        `when`(reservationRepository.findByClient_Username(username)).thenReturn(reservations)
+
+        val returnedReservation = reservationService.getByClientUsername(username)
+
+        assertEquals(username, returnedReservation[0].client.username)
+        assertEquals(roomCap, returnedReservation[0].room.capacity)
     }
 
     @Test
     fun getByRoomNumber() {
+        val roomNum = 7
+        val username = "kiss"
+        val roomCap = 2
+        val client = Client(
+            1,
+            username,
+            "firstName",
+            "lastName",
+            "kissloryshy@gmail.com",
+            "+79044455677",
+            LocalDate.now().minusYears(25)
+        )
+        val room = Room(1, 7, roomCap, 2, true, BigDecimal(10000), BigDecimal(16000))
+        val reservation = Reservation(client, room, LocalDate.now(), LocalDate.now(), LocalDate.now().plusWeeks(1))
+        val reservations = mutableListOf(reservation)
 
+        `when`(reservationRepository.findByRoom_Number(roomNum)).thenReturn(reservations)
+
+        val returnedReservation = reservationService.getByRoomNumber(roomNum)
+
+        assertEquals(username, returnedReservation[0].client.username)
+        assertEquals(roomCap, returnedReservation[0].room.capacity)
     }
 
     @Test
     fun create() {
+        val username = "kiss"
+        val roomNum = 7
+        val roomCap = 2
+        val client = Client(
+            1,
+            username,
+            "firstName",
+            "lastName",
+            "kissloryshy@gmail.com",
+            "+79044455677",
+            LocalDate.now().minusYears(25)
+        )
+        val room = Room(1, 7, roomCap, 2, true, BigDecimal(10000), BigDecimal(16000))
+        val reservation = Reservation(client, room, LocalDate.now(), LocalDate.now(), LocalDate.now().plusWeeks(1))
 
+        `when`(reservationRepository.save(reservation)).thenReturn(reservation)
+
+        val returnedReservation = reservationRepository.save(reservation)
+
+        assertEquals(username, returnedReservation.client?.username)
+        assertEquals(roomNum, returnedReservation.room?.number)
+        assertEquals(roomCap, returnedReservation.room?.capacity)
     }
 
 }

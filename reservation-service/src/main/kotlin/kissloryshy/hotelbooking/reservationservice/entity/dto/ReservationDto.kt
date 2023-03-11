@@ -1,6 +1,7 @@
 package kissloryshy.hotelbooking.reservationservice.entity.dto
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer
@@ -12,9 +13,11 @@ import java.time.LocalDate
 
 data class ReservationDto(
 
+    @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
     @field:NotNull
     val client: Client,
 
+    @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
     @field:NotNull
     val room: Room,
 

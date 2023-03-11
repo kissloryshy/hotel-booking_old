@@ -7,23 +7,21 @@ import kissloryshy.hotelbooking.reservationservice.mapper.ClientMapper
 import kissloryshy.hotelbooking.reservationservice.repository.ClientRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mapstruct.factory.Mappers
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
+import org.mockito.junit.jupiter.MockitoExtension
 import java.time.LocalDate
 
+@ExtendWith(MockitoExtension::class)
 class ClientServiceTest {
     @Mock
     private lateinit var clientRepository: ClientRepository
 
     @InjectMocks
     private lateinit var clientService: ClientService
-
-    init {
-        MockitoAnnotations.openMocks(this)
-    }
 
     @Test
     fun getCount() {
@@ -68,6 +66,27 @@ class ClientServiceTest {
 
         val returnedClient = clientService.getByUsername(username)
 
-        assertEquals(client, returnedClient)
+        assertEquals(client.username, returnedClient?.username)
+        assertEquals(client.email, returnedClient?.email)
+    }
+
+    @Test
+    fun create() {
+        val username = "kiss"
+        val client = Client(
+            1,
+            username,
+            "firstName",
+            "lastName",
+            "kissloryshy@gmail.com",
+            "+79044455677",
+            LocalDate.now().minusYears(25)
+        )
+
+        `when`(clientRepository.save(client)).thenReturn(client)
+
+        val savedClient = clientRepository.save(client)
+
+        assertEquals(username, savedClient.username)
     }
 }

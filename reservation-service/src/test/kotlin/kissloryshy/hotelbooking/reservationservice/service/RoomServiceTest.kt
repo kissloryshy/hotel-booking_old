@@ -5,22 +5,20 @@ import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomCountDto
 import kissloryshy.hotelbooking.reservationservice.repository.RoomRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
+import org.mockito.junit.jupiter.MockitoExtension
 import java.math.BigDecimal
 
+@ExtendWith(MockitoExtension::class)
 class RoomServiceTest {
     @Mock
     private lateinit var roomRepository: RoomRepository
 
     @InjectMocks
     private lateinit var roomService: RoomService
-
-    init {
-        MockitoAnnotations.openMocks(this)
-    }
 
     @Test
     fun getCount() {
@@ -57,5 +55,19 @@ class RoomServiceTest {
         if (returnedRoom != null) {
             assertEquals(roomNumber, returnedRoom.number)
         }
+    }
+
+    @Test
+    fun create() {
+        val roomNum = 7
+        val roomCap = 2
+        val room = Room(1, 7, roomCap, 2, true, BigDecimal(10000), BigDecimal(16000))
+
+        `when`(roomRepository.save(room)).thenReturn(room)
+
+        val returnedRoom = roomRepository.save(room)
+
+        assertEquals(roomNum, returnedRoom.number)
+        assertEquals(roomCap, returnedRoom.capacity)
     }
 }

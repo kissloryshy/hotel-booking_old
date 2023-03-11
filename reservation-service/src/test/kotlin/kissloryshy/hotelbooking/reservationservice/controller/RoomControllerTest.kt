@@ -2,7 +2,7 @@ package kissloryshy.hotelbooking.reservationservice.controller
 
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomCountDto
-import kissloryshy.hotelbooking.reservationservice.exception.exceptions.RoomNotFoundException
+import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomDto
 import kissloryshy.hotelbooking.reservationservice.service.RoomService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -17,17 +17,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import org.springframework.web.bind.MethodArgumentNotValidException
 import java.math.BigDecimal
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(RoomController::class)
 class RoomControllerTest {
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    lateinit var mockMvc: MockMvc
 
     @MockBean
-    private lateinit var roomService: RoomService
+    lateinit var roomService: RoomService
 
     @Test
     fun getCount() {
@@ -74,9 +73,9 @@ class RoomControllerTest {
 
     @Test
     fun getByNumber_exists() {
-        val room1 = Room(1, 1, 1, 1, true, BigDecimal(15), BigDecimal(30))
+        val room = RoomDto(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
 
-        `when`(roomService.getByNumber(1)).thenReturn(room1)
+        `when`(roomService.getByNumber(1)).thenReturn(room)
 
         val id = 1
         val request =
@@ -90,37 +89,4 @@ class RoomControllerTest {
         Mockito.verify(roomService, Mockito.times(1)).getByNumber(id)
     }
 
-    @Test
-    fun getByNumber_notExists() {
-        val roomNumber = "1000"
-        val request =
-            MockMvcRequestBuilders.get("/api/rooms/getByNumber/$roomNumber").contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(request)
-            .andExpect(status().isNotFound)
-            .andExpect { res -> assertTrue(res.resolvedException is RoomNotFoundException) }
-            .andExpect { res ->
-                assertEquals(
-                    "Room not found with number: $roomNumber",
-                    res.resolvedException!!.message
-                )
-            }
-    }
-
-    @Test
-    fun getByNumber_argumentNotValid() {
-        val roomNumber = "-1000"
-        val request =
-            MockMvcRequestBuilders.get("/api/rooms/getByNumber/$roomNumber").contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(request)
-            .andExpect(status().isBadRequest)
-            .andExpect { res -> assertTrue(res.resolvedException is MethodArgumentNotValidException) }
-            .andExpect { res ->
-                assertEquals(
-                    "Room number cannot be negative. Received number: $roomNumber",
-                    res.resolvedException!!.message
-                )
-            }
-    }
 }

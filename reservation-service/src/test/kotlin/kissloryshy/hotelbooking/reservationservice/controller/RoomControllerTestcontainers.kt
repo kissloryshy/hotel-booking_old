@@ -1,12 +1,8 @@
 package kissloryshy.hotelbooking.reservationservice.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import kissloryshy.hotelbooking.reservationservice.entity.Client
-import kissloryshy.hotelbooking.reservationservice.entity.Room
-import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationDto
-import org.junit.jupiter.api.*
+import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomDto
+import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -24,15 +20,13 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.math.BigDecimal
-import java.time.LocalDate
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @RunWith(SpringRunner::class)
 @Testcontainers
-class ReservationControllerTestcontainers {
-
+class RoomControllerTestcontainers {
     @Autowired
     lateinit var mockMvc: MockMvc
 
@@ -55,33 +49,20 @@ class ReservationControllerTestcontainers {
 
     @Test
     fun create() {
-        val date = LocalDate.now()
-
-        val reservationDto = ReservationDto(
-            Client(1, "kissloryshy", "lory", "kiss", "kissloryshy@gmail.com", "+79044488877", date.minusYears(20)),
-            Room(1, 1, 2, 2, true, BigDecimal(2500), BigDecimal(2850)),
-            date,
-            date,
-            date.plusDays(3)
-        )
+        val room = RoomDto(7, 2, 2, true, BigDecimal(3100), BigDecimal(3750))
 
         val result = mockMvc.perform(
             MockMvcRequestBuilders
-                .post("$baseUrl$portNumber/api/reservations/create")
-                .content(
-                    ObjectMapper().registerModule(JavaTimeModule())
-                        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(reservationDto)
-                )
+                .post("$baseUrl$portNumber/api/rooms/create")
+                .content(ObjectMapper().writeValueAsString(room))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         )
         result
             .andExpect(MockMvcResultMatchers.status().isCreated)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.client.username").value("kissloryshy"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.room.capacity").value(2))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.reservationStart").value(date.toString()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.number").value(7))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.capacity").value(2))
 
         println(result.andReturn().response.contentAsString)
     }
-
 }
