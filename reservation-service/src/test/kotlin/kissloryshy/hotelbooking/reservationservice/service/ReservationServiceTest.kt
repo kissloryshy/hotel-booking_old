@@ -68,7 +68,7 @@ class ReservationServiceTest {
         val reservation = Reservation(client, room, LocalDate.now(), LocalDate.now(), LocalDate.now().plusWeeks(1))
         val reservations = mutableListOf(reservation)
 
-        `when`(reservationRepository.findByClient_Username(username)).thenReturn(reservations)
+        `when`(reservationRepository.findByClientUsername(username)).thenReturn(reservations)
 
         val returnedReservation = reservationService.getByClientUsername(username)
 
@@ -94,7 +94,7 @@ class ReservationServiceTest {
         val reservation = Reservation(client, room, LocalDate.now(), LocalDate.now(), LocalDate.now().plusWeeks(1))
         val reservations = mutableListOf(reservation)
 
-        `when`(reservationRepository.findByRoom_Number(roomNum)).thenReturn(reservations)
+        `when`(reservationRepository.findByRoomNumber(roomNum)).thenReturn(reservations)
 
         val returnedReservation = reservationService.getByRoomNumber(roomNum)
 

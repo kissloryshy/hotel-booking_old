@@ -34,9 +34,13 @@ class ReservationController(
         return ResponseEntity.ok(reservationService.getByRoomNumber(number))
     }
 
-    @PostMapping("/create")
-    fun create(@Valid @RequestBody reservationDto: ReservationDto): ResponseEntity<ReservationDto> {
-        return ResponseEntity(reservationService.create(reservationDto), HttpStatus.CREATED)
+    @PostMapping("/check")
+    fun checkDates(@Valid @RequestBody reservationDto: ReservationDto): ResponseEntity<Boolean> {
+        return ResponseEntity(reservationService.checkDates(reservationDto), HttpStatus.OK)
     }
 
+    @PostMapping("/create")
+    fun create(@Valid @RequestBody reservationDto: ReservationDto): ResponseEntity<ReservationDto> {
+        return reservationService.create(reservationDto)
+    }
 }

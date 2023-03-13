@@ -3,6 +3,7 @@ package kissloryshy.hotelbooking.reservationservice.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import kissloryshy.hotelbooking.reservationservice.config.KafkaProducerTestConfig
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientCountDto
 import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
 import kissloryshy.hotelbooking.reservationservice.exception.exceptions.ClientNotFoundException
@@ -14,8 +15,10 @@ import org.mockito.BDDMockito.*
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -26,14 +29,17 @@ import java.time.LocalDate
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(ClientController::class)
+@Import(KafkaProducerTestConfig::class)
 class ClientControllerTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
 
     @MockBean
+    @Qualifier("messageKafkaTemplate")
     private lateinit var messageKafkaTemplate: KafkaTemplate<String, String>
 
     @MockBean
+    @Qualifier("clientDtoKafkaTemplate")
     private lateinit var clientKafkaTemplate: KafkaTemplate<String, ClientDto>
 
     @MockBean

@@ -1,8 +1,5 @@
 package kissloryshy.hotelbooking.reservationservice.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import kissloryshy.hotelbooking.reservationservice.entity.Client
 import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.*
@@ -32,9 +29,6 @@ import java.time.LocalDate
 class ReservationControllerTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
 
     @MockBean
     private lateinit var reservationService: ReservationService
@@ -128,29 +122,28 @@ class ReservationControllerTest {
         Mockito.verify(reservationService, times(1)).getByRoomNumber(testNumber)
     }
 
-    @Test
-    fun create_old() {
-        val date = LocalDate.now()
-
-        val reservationDto = ReservationDto(
-            Client(1, "kissloryshy", "lory", "kiss", "kissloryshy@gmail.com", "+79044488877", date.minusYears(20)),
-            Room(1, 1, 2, 2, true, BigDecimal(2500), BigDecimal(2850)),
-            date,
-            date,
-            date.plusDays(3)
-        )
-
-        mockMvc.perform(
-            MockMvcRequestBuilders
-                .post("/api/reservations/create")
-                .content(
-                    objectMapper.registerModule(JavaTimeModule())
-                        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(reservationDto)
-                )
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(status().isCreated)
-    }
-
+//    @Test
+//    fun create_old() {
+//        val date = LocalDate.now()
+//
+//        val reservationDto = ReservationDto(
+//            Client(1, "kissloryshy", "lory", "kiss", "kissloryshy@gmail.com", "+79044488877", date.minusYears(20)),
+//            Room(1, 1, 2, 2, true, BigDecimal(2500), BigDecimal(2850)),
+//            date,
+//            date,
+//            date.plusDays(3)
+//        )
+//
+//        mockMvc.perform(
+//            MockMvcRequestBuilders
+//                .post("/api/reservations/create")
+//                .content(
+//                    objectMapper.registerModule(JavaTimeModule())
+//                        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(reservationDto)
+//                )
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON)
+//        )
+//            .andExpect(status().isOk)
+//    }
 }

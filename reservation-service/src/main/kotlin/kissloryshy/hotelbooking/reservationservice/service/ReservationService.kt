@@ -5,6 +5,8 @@ import kissloryshy.hotelbooking.reservationservice.entity.dto.ReservationDto
 import kissloryshy.hotelbooking.reservationservice.mapper.ReservationMapper
 import kissloryshy.hotelbooking.reservationservice.repository.ReservationRepository
 import org.mapstruct.factory.Mappers
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
@@ -22,14 +24,25 @@ class ReservationService(
     }
 
     fun getByClientUsername(username: String): List<ReservationDto> {
-        return reservationRepository.findByClient_Username(username).map { converter.toDto(it) }
+        return reservationRepository.findByClientUsername(username).map { converter.toDto(it) }
     }
 
     fun getByRoomNumber(number: Int): List<ReservationDto> {
-        return reservationRepository.findByRoom_Number(number).map { converter.toDto(it) }
+        return reservationRepository.findByRoomNumber(number).map { converter.toDto(it) }
     }
 
-    fun create(reservationDto: ReservationDto): ReservationDto {
-        return converter.toDto(reservationRepository.save(converter.toModel(reservationDto)))
+    fun checkDates(reservationDto: ReservationDto): Boolean {
+        return reservationRepository.checkDates(reservationDto.reservationStart, reservationDto.reservationEnd)
+    }
+
+    fun create(reservationDto: ReservationDto): ResponseEntity<ReservationDto> {
+        return if (reservationRepository.checkDates(reservationDto.reservationStart, reservationDto.reservationEnd)) {
+            ResponseEntity(
+                converter.toDto(reservationRepository.save(converter.toModel(reservationDto))),
+                HttpStatus.CREATED
+            )
+        } else {
+            ResponseEntity(reservationDto, HttpStatus.BAD_REQUEST)
+        }
     }
 }
