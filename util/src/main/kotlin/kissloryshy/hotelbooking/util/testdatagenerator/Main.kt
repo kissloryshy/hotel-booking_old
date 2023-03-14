@@ -1,4 +1,4 @@
-package kissloryshy.hotelbooking.testdatagenerator
+package kissloryshy.hotelbooking.util.testdatagenerator
 
 import com.github.javafaker.Faker
 import java.text.SimpleDateFormat

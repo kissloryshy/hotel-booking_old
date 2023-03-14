@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.client.RestTemplate
 
 @RestController
 @RequestMapping("/api/clients")
@@ -54,4 +55,20 @@ class ClientController(
         return ResponseEntity(clientService.create(clientDto), HttpStatus.CREATED)
     }
 
+    @PutMapping("/changeFirstName/{username}/{firstName}")
+    fun changeFirstName(@PathVariable("username") username: String,
+                        @PathVariable("firstName") firstName: String): ResponseEntity<Boolean> {
+        return if(clientService.changeFirstName(username, firstName)) {
+            ResponseEntity(true, HttpStatus.OK)
+        } else {
+            ResponseEntity(false, HttpStatus.NOT_FOUND)
+        }
+    }
+
+    @GetMapping("/getTest/{message}")
+    fun getTest(@PathVariable("message") message: String): ResponseEntity<String> {
+        val restTemplate = RestTemplate()
+        val resource = "http://localhost:9000/api/docs/"
+        return restTemplate.getForEntity(resource + "test/hello-kissloryshy", String::class.java)
+    }
 }

@@ -30,4 +30,14 @@ class ClientService(
     fun create(clientDto: ClientDto): ClientDto {
         return converter.toDto(clientRepository.save(converter.toModel(clientDto)))
     }
+
+    fun changeFirstName(username: String, firstName: String): Boolean {
+        val client = clientRepository.findClientByUsername(username)
+        return if (client != null) {
+            client.firstName = firstName
+            true
+        } else {
+            false
+        }
+    }
 }
