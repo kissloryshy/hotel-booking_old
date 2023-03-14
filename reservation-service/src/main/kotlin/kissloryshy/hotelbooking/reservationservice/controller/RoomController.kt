@@ -1,7 +1,6 @@
 package kissloryshy.hotelbooking.reservationservice.controller
 
 import jakarta.validation.Valid
-import kissloryshy.hotelbooking.reservationservice.entity.Room
 import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomCountDto
 import kissloryshy.hotelbooking.reservationservice.entity.dto.RoomDto
 import kissloryshy.hotelbooking.reservationservice.service.RoomService
@@ -19,10 +18,9 @@ class RoomController(
         return roomService.getCount()
     }
 
-    @GetMapping("/getAll")
-    fun getAll(): List<Room> {
-//        TODO paginated
-        return roomService.getAll()
+    @GetMapping("/getAll/{page}/{size}")
+    fun getAll(@PathVariable("page") page: Int, @PathVariable("size") size: Int): List<RoomDto> {
+        return roomService.getAll(page, size)
     }
 
     @GetMapping("/getByNumber/{roomNumber}")

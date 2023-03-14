@@ -60,10 +60,10 @@ class ReservationControllerTest {
         val reservation2 = ReservationDto(Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
         val reservations = listOf(reservation1, reservation2)
 
-        `when`(reservationService.getAll()).thenReturn(reservations)
+        `when`(reservationService.getAll(0, 5)).thenReturn(reservations)
 
         val request = MockMvcRequestBuilders
-            .get("/api/reservations/getAll")
+            .get("/api/reservations/getAll/0/5")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(request)
@@ -71,7 +71,7 @@ class ReservationControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.length()").value(reservations.size))
 
-        Mockito.verify(reservationService, times(1)).getAll()
+        Mockito.verify(reservationService, times(1)).getAll(0, 5)
     }
 
     @Test

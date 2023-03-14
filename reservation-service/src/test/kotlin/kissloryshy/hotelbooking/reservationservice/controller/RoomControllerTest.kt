@@ -50,15 +50,15 @@ class RoomControllerTest {
 
     @Test
     fun getAll() {
-        val room1 = Room(1, 1, 1, 1, true, BigDecimal(15), BigDecimal(30))
-        val room2 = Room(1, 2, 3, 2, true, BigDecimal(20), BigDecimal(35))
+        val room1 = RoomDto(1, 1, 1, true, BigDecimal(15), BigDecimal(30))
+        val room2 = RoomDto(2, 3, 2, true, BigDecimal(20), BigDecimal(35))
         val rooms = listOf(room1, room2)
         val roomCount = rooms.size
 
-        `when`(roomService.getAll()).thenReturn(rooms)
+        `when`(roomService.getAll(0, 5)).thenReturn(rooms)
 
         val request = MockMvcRequestBuilders
-            .get("/api/rooms/getAll")
+            .get("/api/rooms/getAll/0/5")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(request)
@@ -68,7 +68,7 @@ class RoomControllerTest {
             .andExpect(jsonPath("$[0].number").value(rooms[0].number))
             .andExpect(jsonPath("$[1].number").value(rooms[1].number))
 
-        Mockito.verify(roomService, Mockito.times(1)).getAll()
+        Mockito.verify(roomService, Mockito.times(1)).getAll(0, 5)
     }
 
     @Test

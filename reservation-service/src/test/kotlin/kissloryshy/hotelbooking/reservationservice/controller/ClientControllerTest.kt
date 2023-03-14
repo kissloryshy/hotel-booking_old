@@ -76,10 +76,10 @@ class ClientControllerTest {
             ClientDto("testUn2", "testFn2", "testLn2", "kissloryshy2@gmail.com", "+79044477899", LocalDate.now())
         val clients = listOf(client1, client2)
 
-        `when`(clientService.getAll()).thenReturn(clients)
+        `when`(clientService.getAll(0, 5)).thenReturn(clients)
 
         val request = MockMvcRequestBuilders
-            .get("/api/clients/getAll")
+            .get("/api/clients/getAll/0/5")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(request)
@@ -89,7 +89,7 @@ class ClientControllerTest {
             .andExpect(jsonPath("$[0].firstName").value(clients[0].firstName))
             .andExpect(jsonPath("$[1].phoneNumber").value(clients[1].phoneNumber))
 
-        Mockito.verify(clientService, times(1)).getAll()
+        Mockito.verify(clientService, times(1)).getAll(0, 5)
     }
 
     @Test

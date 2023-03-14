@@ -27,10 +27,9 @@ class ClientController(
         return clientService.getCount()
     }
 
-    @GetMapping("/getAll")
-    fun getAll(): ResponseEntity<List<ClientDto>> {
-//        TODO paginated
-        return ResponseEntity.ok(clientService.getAll())
+    @GetMapping("/getAll/{page}/{size}")
+    fun getAll(@PathVariable("page") page: Int, @PathVariable("size") size: Int): ResponseEntity<List<ClientDto>> {
+        return ResponseEntity.ok(clientService.getAll(page, size))
     }
 
     @GetMapping("/getByUsername/{username}")

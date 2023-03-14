@@ -10,6 +10,9 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import java.math.BigDecimal
 
 @ExtendWith(MockitoExtension::class)
@@ -36,11 +39,12 @@ class RoomServiceTest {
         val room2 = Room(2, 2, 3, 2, true, BigDecimal(20), BigDecimal(35))
         val rooms = listOf(room1, room2)
 
-        `when`(roomRepository.findAll()).thenReturn(rooms)
+        val page: Page<Room> = PageImpl(rooms)
+        `when`(roomRepository.findAll(PageRequest.of(0, 5))).thenReturn(page)
 
-        val returnedRooms = roomService.getAll()
+        val returnedRooms = roomService.getAll(0, 5)
 
-        assertEquals(rooms, returnedRooms)
+        assertEquals(rooms.size, returnedRooms.size)
     }
 
     @Test

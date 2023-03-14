@@ -5,6 +5,7 @@ import kissloryshy.hotelbooking.reservationservice.entity.dto.ClientDto
 import kissloryshy.hotelbooking.reservationservice.mapper.ClientMapper
 import kissloryshy.hotelbooking.reservationservice.repository.ClientRepository
 import org.mapstruct.factory.Mappers
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,8 +18,9 @@ class ClientService(
         return ClientCountDto(clientRepository.count())
     }
 
-    fun getAll(): List<ClientDto> {
-        return clientRepository.findAll().map { converter.toDto(it) }
+    fun getAll(page: Int, size: Int): List<ClientDto> {
+        val pagination = PageRequest.of(page, size)
+        return clientRepository.findAll(pagination).map { converter.toDto(it) }.toList()
     }
 
     fun getByUsername(username: String): ClientDto? {

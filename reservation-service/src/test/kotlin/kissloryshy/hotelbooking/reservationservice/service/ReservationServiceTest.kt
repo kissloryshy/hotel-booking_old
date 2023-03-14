@@ -15,6 +15,8 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import java.math.BigDecimal
 import java.time.LocalDate
 
@@ -42,9 +44,10 @@ class ReservationServiceTest {
         val reservation2 = Reservation(Client(), Room(), LocalDate.now(), LocalDate.now(), LocalDate.now())
         val reservations = listOf(reservation1, reservation2)
 
-        `when`(reservationRepository.findAll()).thenReturn(reservations)
+        val page = PageImpl(reservations)
+        `when`(reservationRepository.findAll(PageRequest.of(0, 5))).thenReturn(page)
 
-        val returnedClients = reservationService.getAll()
+        val returnedClients = reservationService.getAll(0, 5)
 
         val mapper = Mappers.getMapper(ReservationMapper::class.java)
         assertTrue(reservations[0].reservationEnd == returnedClients.map { mapper.toModel(it) }[0].reservationEnd)

@@ -18,10 +18,9 @@ class ReservationController(
         return reservationService.getCount()
     }
 
-    @GetMapping("/getAll")
-    fun getAll(): List<ReservationDto> {
-//        TODO paginated
-        return reservationService.getAll()
+    @GetMapping("/getAll/{page}/{size}")
+    fun getAll(@PathVariable("page") page: Int, @PathVariable("size") size: Int): List<ReservationDto> {
+        return reservationService.getAll(page, size)
     }
 
     @GetMapping("/getByClientUsername/{username}")

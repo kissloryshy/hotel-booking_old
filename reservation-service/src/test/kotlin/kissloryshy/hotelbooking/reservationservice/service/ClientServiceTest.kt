@@ -13,6 +13,8 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
@@ -43,9 +45,10 @@ class ClientServiceTest {
         val converter = Mappers.getMapper(ClientMapper::class.java)
         val clientEntityList = mutableListOf(converter.toModel(client1), converter.toModel(client2))
 
-        `when`(clientRepository.findAll()).thenReturn(clientEntityList)
+        val page = PageImpl(clientEntityList)
+        `when`(clientRepository.findAll(PageRequest.of(0, 5))).thenReturn(page)
 
-        val returnedClients = clientService.getAll()
+        val returnedClients = clientService.getAll(0, 5)
 
         assertEquals(clientDtoList, returnedClients)
     }
