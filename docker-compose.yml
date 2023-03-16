@@ -3,6 +3,8 @@ version: '3'
 volumes:
   postgres-data:
     driver: local
+  mongo-data:
+    driver: local
   zookeeper-data:
     driver: local
   kafka-data:
@@ -22,6 +24,28 @@ services:
     ports:
       - "10001:10001"
     command: -p 10001
+
+  mongodb:
+    image: mongo:4.4.19
+    container_name: mongodb
+    volumes:
+      - mongo-data:/data
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: 1212
+
+  mongo-express:
+    image: mongo-express:0.54.0
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongo
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 1212
+      ME_CONFIG_MONGODB_SERVER: mongodb
 
 #  postgres-hotel-booking:
 #    image: bitnami/postgresql:15.2.0

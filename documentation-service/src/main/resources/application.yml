@@ -9,3 +9,12 @@ eureka:
 spring:
   application:
     name: documentation-service
+  data:
+    mongodb:
+      uri: mongodb://mongo:1212@localhost:27017/hotel-booking-docs?authSource=admin
+#      authentication-database: admin
+#      username: mongo
+#      password: 1212
+#      database: hotel-booking-docs
+#      port: 27017
+#      host: localhost
